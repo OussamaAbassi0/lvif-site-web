@@ -12,18 +12,23 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const MEDIA_DIR = path.join(ROOT, 'public', 'media');
 const MANIFEST = path.join(ROOT, 'lib', 'media-manifest.json');
 
+/**
+ * Les deux clips sont générés en image-to-video à partir de photographies
+ * réelles d'installations LVIF (enseignes portant le logo de l'entreprise),
+ * conservées dans public/frames.
+ */
 const SOURCES = [
   {
     key: 'ignition',
-    file: 'lvif-ignition.mp4',
+    file: 'lvif-enseigne-mat.mp4',
     remote:
-      'https://d8j0ntlcm91z4.cloudfront.net/user_3DqYn3j4DArebNPxwQdIoJfqAKB/hf_20260724_214552_29d06505-1b71-436d-b9c7-accfbef7f69b.mp4',
+      'https://d8j0ntlcm91z4.cloudfront.net/user_3DqYn3j4DArebNPxwQdIoJfqAKB/hf_20260724_232744_28253e7b-453f-4ae5-9d1c-3394f13c5854.mp4',
   },
   {
     key: 'assembly',
-    file: 'lvif-assembly.mp4',
+    file: 'lvif-enseigne-facade.mp4',
     remote:
-      'https://d8j0ntlcm91z4.cloudfront.net/user_3DqYn3j4DArebNPxwQdIoJfqAKB/hf_20260724_214614_6f07ac2a-a1c6-4aeb-8b97-85cacc775452.mp4',
+      'https://d8j0ntlcm91z4.cloudfront.net/user_3DqYn3j4DArebNPxwQdIoJfqAKB/hf_20260724_233947_53c536b7-64a8-4c5a-a04e-eef94bfd9129.mp4',
   },
 ];
 

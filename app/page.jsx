@@ -7,6 +7,7 @@ import Reveal from '@/components/reveal';
 import Counter from '@/components/counter';
 import ProjectCard from '@/components/project-card';
 import FaqList from '@/components/faq-list';
+import CoverageMap from '@/components/coverage-map';
 import { keyFigures, pillars, ranges, projects, sectors } from '@/lib/content';
 
 export default function HomePage() {
@@ -210,11 +211,14 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* — Implantation ——————————————————————————————————— */}
+      <CoverageMap index="06" />
+
       {/* — FAQ ————————————————————————————————————————— */}
       <section className="relative border-t border-hairline bg-ink-raised">
         <div className="shell py-24 md:py-36">
           <SectionHead
-            index="06"
+            index="07"
             label="Questions fréquentes"
             title="Ce qu’un acheteur doit vérifier avant de signer."
             lede="Le nombre d’années de garantie affiché ne dit rien de ce qu’il couvre réellement. Ces six réponses reprennent les points sur lesquels les offres du marché divergent le plus."

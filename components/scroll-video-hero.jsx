@@ -19,20 +19,20 @@ const CHAPTERS = [
   {
     at: 0,
     index: '01',
-    kicker: 'Le module',
-    line: 'Chaque pixel est assemblé, testé et garanti en France.',
+    kicker: 'L’enseigne',
+    line: 'Une enseigne numérique lisible de jour comme de nuit.',
   },
   {
     at: 0.34,
     index: '02',
-    kicker: 'Le mur',
-    line: 'Des cabinets alignés au millimètre, sans bord apparent.',
+    kicker: 'Le module',
+    line: 'Des dalles assemblées, câblées et testées en France.',
   },
   {
     at: 0.68,
     index: '03',
-    kicker: 'Le chantier',
-    line: 'Des équipes salariées, sur site, partout en Europe.',
+    kicker: 'Le suivi',
+    line: 'Garantie 5 ans, hotline gratuite, intervention sous 48 h.',
   },
 ];
 
@@ -239,8 +239,9 @@ export default function ScrollVideoHero() {
             </div>
           </div>
 
-          {/* Barre de progression du scroll */}
-          <div className="mt-12 flex items-center gap-5">
+          {/* Barre de progression du scroll — décalée à droite sur mobile
+              pour laisser respirer le déclencheur du chat */}
+          <div className="mt-12 flex items-center gap-5 pr-[13.5rem] sm:pr-0">
             <span className="slug shrink-0">
               {ready ? 'Faites défiler' : 'Chargement'}
             </span>

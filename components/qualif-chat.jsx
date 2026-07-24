@@ -28,18 +28,11 @@ export default function QualifChat() {
   const [step, setStep] = useState('mode');
   const [profile, setProfile] = useState({});
   const [draft, setDraft] = useState('');
-  const [nudge, setNudge] = useState(false);
 
   const logRef = useRef(null);
   const inputRef = useRef(null);
   const panelRef = useRef(null);
   const triggerRef = useRef(null);
-
-  /* Invite discrète après un moment de lecture */
-  useEffect(() => {
-    const timer = window.setTimeout(() => setNudge(true), 14000);
-    return () => window.clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     if (logRef.current) {
@@ -49,7 +42,6 @@ export default function QualifChat() {
 
   useEffect(() => {
     if (open) {
-      setNudge(false);
       window.setTimeout(() => inputRef.current?.focus(), 120);
     }
   }, [open]);
@@ -160,11 +152,6 @@ export default function QualifChat() {
     <>
       {/* Déclencheur flottant */}
       <div className="fixed bottom-5 right-5 z-[130] flex flex-col items-end gap-3 md:bottom-7 md:right-7">
-        {nudge && !open && (
-          <p className="max-w-[15rem] border border-hairline bg-ink-panel px-4 py-3 text-[0.82rem] leading-snug text-bone-dim shadow-[0_18px_50px_rgba(0,0,0,0.55)]">
-            Besoin d’un ordre de grandeur pour votre projet ?
-          </p>
-        )}
         <button
           ref={triggerRef}
           type="button"
