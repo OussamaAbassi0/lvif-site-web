@@ -42,6 +42,17 @@ async function scrollToSelector(page, selector) {
   await wait(1500);
 }
 
+/** Amène au centre de l'écran la section portant ce titre. */
+async function byHeading(page, text) {
+  await page.evaluate((needle) => {
+    const target = Array.from(document.querySelectorAll('h2')).find((h) =>
+      h.textContent.includes(needle),
+    );
+    if (target) target.scrollIntoView({ block: 'center', behavior: 'instant' });
+  }, text);
+  await wait(1600);
+}
+
 async function run() {
   await mkdir(OUT, { recursive: true });
   const browser = await puppeteer.launch({
@@ -87,6 +98,12 @@ async function run() {
 
     await scrollToSelector(page, 'h2');
     await capture(page, `05-accueil-chiffres-${device.key}`);
+
+    await byHeading(page, 'Dimensionnez');
+    await capture(page, `05b-simulateur-${device.key}`);
+
+    await byHeading(page, 'avis clients');
+    await capture(page, `05c-avis-${device.key}`);
 
     await page.evaluate(() => {
       const headings = Array.from(document.querySelectorAll('h2'));

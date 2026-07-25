@@ -245,7 +245,7 @@ export default function Simulator() {
 
               <p className="stat mt-7 text-[clamp(2.6rem,5vw,3.6rem)] text-white">
                 {result.surface.toFixed(1).replace('.', ',')}
-                <span className="text-[1.5rem]"> m²</span>
+                <span className="ml-2 text-[1.5rem]">m²</span>
               </p>
               <p className="mt-3 text-[0.9rem] text-white/60">
                 {result.px.toLocaleString('fr-FR')} × {result.py.toLocaleString('fr-FR')} pixels ·
