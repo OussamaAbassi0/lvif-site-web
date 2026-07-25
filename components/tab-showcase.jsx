@@ -152,13 +152,38 @@ export default function TabShowcase({ items, media = true, eyebrow, title, lead 
                 </ul>
               )}
 
-              {current.href && (
-                <Link
-                  href={current.href}
-                  className="sweep mt-auto pt-8 text-[0.9rem] font-bold text-ink"
-                >
-                  En savoir plus
-                </Link>
+              {current.cta ? (
+                <div className="mt-auto pt-9">
+                  <Link
+                    href={current.cta.href}
+                    className="inline-flex items-center gap-4 rounded-full bg-lime py-2 pl-6 pr-2 text-[0.9rem] font-bold text-ink transition-transform duration-300 hover:-translate-y-0.5"
+                  >
+                    {current.cta.label}
+                    <span
+                      aria-hidden="true"
+                      className="grid h-9 w-9 place-items-center rounded-full bg-ink text-lime"
+                    >
+                      <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none">
+                        <path
+                          d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </Link>
+                </div>
+              ) : (
+                current.href && (
+                  <Link
+                    href={current.href}
+                    className="sweep mt-auto pt-8 text-[0.9rem] font-bold text-ink"
+                  >
+                    En savoir plus
+                  </Link>
+                )
               )}
             </div>
           </div>

@@ -80,6 +80,7 @@ export default function SiteHeader() {
   const [search, setSearch] = useState(false);
   const [expanded, setExpanded] = useState(null);
   const timer = useRef(null);
+  const shell = useRef(null);
 
   useEffect(() => {
     setOpen(false);
@@ -125,6 +126,38 @@ export default function SiteHeader() {
     timer.current = window.setTimeout(() => setMenu(null), 160);
   };
 
+  /**
+   * Fermeture sur la position réelle du pointeur.
+   *
+   * `onMouseLeave` seul ne suffisait pas : quand le curseur sort par un bord
+   * où un enfant vient d'être masqué, ou passe d'un panneau à l'autre, React
+   * n'émet pas toujours l'événement et le menu restait ouvert. On regarde
+   * donc si le pointeur est encore dans la boîte de l'en-tête ; c'est la
+   * seule information qui ne peut pas être ratée.
+   */
+  useEffect(() => {
+    if (!menu) return undefined;
+    const node = shell.current;
+    if (!node) return undefined;
+
+    const check = (event) => {
+      const box = node.getBoundingClientRect();
+      const inside =
+        event.clientX >= box.left &&
+        event.clientX <= box.right &&
+        event.clientY >= box.top &&
+        event.clientY <= box.bottom;
+      if (!inside) {
+        window.clearTimeout(timer.current);
+        setMenu(null);
+      }
+    };
+
+    window.addEventListener('pointermove', check, { passive: true });
+    window.addEventListener('scroll', () => setMenu(null), { passive: true, once: true });
+    return () => window.removeEventListener('pointermove', check);
+  }, [menu]);
+
   const active = (href) => pathname === href || (href !== '/' && pathname.startsWith(href));
 
   return (
@@ -155,7 +188,7 @@ export default function SiteHeader() {
           </div>
         </div>
 
-        <div className="shell pt-3 lg:pt-4">
+        <div ref={shell} className="shell pt-3 lg:pt-4">
           <div className="flex items-center justify-between gap-3">
             <Link
               href="/"

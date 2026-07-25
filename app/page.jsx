@@ -10,6 +10,8 @@ import FaqList from '@/components/faq-list';
 import CoverageMap from '@/components/coverage-map';
 import Reviews from '@/components/reviews';
 import Simulator from '@/components/simulator';
+import TabShowcase from '@/components/tab-showcase';
+import { fixedInstall } from '@/lib/pages';
 import ArrowPill from '@/components/arrow-pill';
 import { keyFigures, pillars, ranges, projects, useCases } from '@/lib/content';
 
@@ -183,6 +185,13 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <TabShowcase
+        eyebrow="Achat"
+        title={fixedInstall.title}
+        lead={fixedInstall.lead}
+        items={fixedInstall.items}
+      />
 
       <Simulator />
 
