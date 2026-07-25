@@ -65,6 +65,7 @@ function Tile({ slug, name, size }) {
             width={320}
             height={120}
             unoptimized
+            loading="eager"
             className={`${preset.logo} h-auto w-auto object-contain opacity-80 grayscale transition-[filter,opacity] duration-500 hover:opacity-100`}
           />
         </span>
