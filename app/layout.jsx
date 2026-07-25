@@ -4,23 +4,20 @@ import SiteFooter from '@/components/site-footer';
 import QualifChat from '@/components/qualif-chat';
 
 export const metadata = {
-  metadataBase: new URL('https://lvif-site-web.vercel.app'),
+  metadataBase: new URL('https://lvif-showcase-concept.vercel.app'),
   title: {
-    default: 'LED Visual Innovation — Fabricant français d’écrans géants LED',
+    default: 'LED Visual Innovation — Location et vente d’écrans géants LED',
     template: '%s · LED Visual Innovation',
   },
   description:
-    'Fabricant français d’écrans géants LED à l’achat et à la location. Assemblage en France, garantie 5 ans, logiciel d’affichage sans abonnement, intervention sous 48 h.',
-  openGraph: {
-    type: 'website',
-    locale: 'fr_FR',
-    siteName: 'LED Visual Innovation',
-  },
+    'Fabricant français d’écrans géants LED, à la location comme à l’achat. Assemblage en France, garantie 5 ans, logiciel d’affichage sans abonnement, intervention sous 48 h.',
+  icons: { icon: '/logo-lvi.svg' },
+  openGraph: { type: 'website', locale: 'fr_FR', siteName: 'LED Visual Innovation' },
   robots: { index: false, follow: false },
 };
 
 export const viewport = {
-  themeColor: '#060607',
+  themeColor: '#fcfcfc',
   width: 'device-width',
   initialScale: 1,
 };
@@ -32,14 +29,14 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Figtree:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased">
+      <body>
         <a
           href="#contenu"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:bg-signal focus:px-4 focus:py-2 focus:text-black"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-paper"
         >
           Aller au contenu
         </a>

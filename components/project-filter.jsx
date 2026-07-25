@@ -15,8 +15,7 @@ export default function ProjectFilter({ projects }) {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-2 border-b border-hairline pb-6">
-        <span className="slug mr-3">Filtrer</span>
+      <div className="flex flex-wrap items-center gap-2">
         {tags.map((tag) => {
           const selected = active === tag;
           return (
@@ -25,20 +24,15 @@ export default function ProjectFilter({ projects }) {
               type="button"
               onClick={() => setActive(tag)}
               aria-pressed={selected}
-              className={`min-h-[40px] border px-4 py-2 font-[family-name:var(--font-mono)] text-[0.65rem] uppercase tracking-[0.14em] transition-colors duration-200 ${
-                selected
-                  ? 'border-signal bg-signal text-black'
-                  : 'border-hairline text-bone-dim hover:border-bone-faint hover:text-bone'
+              className={`min-h-[44px] rounded-full px-5 py-2.5 text-[0.88rem] font-semibold transition-colors duration-200 ${
+                selected ? 'bg-ink text-paper' : 'bg-tile text-muted hover:text-ink'
               }`}
             >
               {tag}
             </button>
           );
         })}
-        <span
-          className="ml-auto font-[family-name:var(--font-mono)] text-[0.65rem] uppercase tracking-[0.14em] text-bone-faint"
-          aria-live="polite"
-        >
+        <span className="ml-auto text-[0.82rem] font-semibold text-faint" aria-live="polite">
           {visible.length} projet{visible.length > 1 ? 's' : ''}
         </span>
       </div>

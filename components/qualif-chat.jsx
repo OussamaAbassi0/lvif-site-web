@@ -15,10 +15,7 @@ const INTRO = [
     from: 'bot',
     text: 'Bonjour. Je qualifie les projets d’écran LED : je réponds aux questions techniques et je prépare votre dossier pour l’équipe. Je ne transmets rien automatiquement.',
   },
-  {
-    from: 'bot',
-    text: stepPrompts.mode.question,
-  },
+  { from: 'bot', text: stepPrompts.mode.question },
 ];
 
 export default function QualifChat() {
@@ -31,22 +28,16 @@ export default function QualifChat() {
 
   const logRef = useRef(null);
   const inputRef = useRef(null);
-  const panelRef = useRef(null);
   const triggerRef = useRef(null);
 
   useEffect(() => {
-    if (logRef.current) {
-      logRef.current.scrollTop = logRef.current.scrollHeight;
-    }
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [messages, open]);
 
   useEffect(() => {
-    if (open) {
-      window.setTimeout(() => inputRef.current?.focus(), 120);
-    }
+    if (open) window.setTimeout(() => inputRef.current?.focus(), 120);
   }, [open]);
 
-  /* Échappement et piège de focus sommaire */
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (event) => {
@@ -73,7 +64,6 @@ export default function QualifChat() {
             from: 'bot',
             text: 'J’ai tout ce qu’il faut pour préparer le devis. Le formulaire sera pré-rempli avec ces éléments — vous n’aurez qu’à ajouter vos coordonnées.',
             cta: true,
-            summary,
           },
         ]);
         try {
@@ -82,7 +72,7 @@ export default function QualifChat() {
             JSON.stringify({ ...nextProfile, summary }),
           );
         } catch {
-          /* stockage indisponible : le formulaire restera vierge */
+          /* stockage indisponible */
         }
         return;
       }
@@ -91,11 +81,18 @@ export default function QualifChat() {
     [push],
   );
 
+  const currentQuestion = () => (step === 'done' ? '' : stepPrompts[step].question);
+
+  const currentOptions = () => {
+    if (step === 'done') return [];
+    if (step === 'type') return typeOptions(profile);
+    return stepPrompts[step].options;
+  };
+
   const advance = (value, label) => {
     const nextProfile = { ...profile, [step]: value };
     const order = ['mode', 'usage', 'type', 'surface', 'date', 'done'];
     const nextStep = order[order.indexOf(step) + 1] || 'done';
-
     push([{ from: 'user', text: label }]);
     setProfile(nextProfile);
     setStep(nextStep);
@@ -124,21 +121,10 @@ export default function QualifChat() {
       push([
         {
           from: 'bot',
-          text: 'Je ne suis pas certain de bien comprendre. Je peux répondre sur les prix, la garantie, le logiciel SmartView, la maintenance, le pitch, les zones d’intervention ou nos références. Sinon, on continue la qualification.',
+          text: 'Je ne suis pas certain de bien comprendre. Je peux répondre sur les prix, la garantie, le logiciel SmartView, la maintenance, le pitch, les zones d’intervention ou nos références.',
         },
       ]);
     }, 320);
-  };
-
-  const currentQuestion = () => {
-    if (step === 'done') return '';
-    return stepPrompts[step].question;
-  };
-
-  const currentOptions = () => {
-    if (step === 'done') return [];
-    if (step === 'type') return typeOptions(profile);
-    return stepPrompts[step].options;
   };
 
   const reset = () => {
@@ -150,50 +136,56 @@ export default function QualifChat() {
 
   return (
     <>
-      {/* Déclencheur flottant */}
-      <div className="fixed bottom-5 right-5 z-[130] flex flex-col items-end gap-3 md:bottom-7 md:right-7">
-        <button
-          ref={triggerRef}
-          type="button"
-          onClick={() => setOpen((value) => !value)}
-          aria-expanded={open}
-          aria-controls="lvif-chat"
-          className="flex h-14 items-center gap-3 border border-signal bg-signal px-5 font-[family-name:var(--font-mono)] text-[0.68rem] uppercase tracking-[0.14em] text-black transition-transform duration-300 hover:scale-[1.03] active:scale-100"
-        >
-          <span
-            aria-hidden="true"
-            className="grid h-3.5 w-3.5 grid-cols-2 grid-rows-2 gap-[2px]"
-          >
-            <span className="bg-black" />
-            <span className="bg-black/40" />
-            <span className="bg-black/40" />
-            <span className="bg-black" />
-          </span>
-          {open ? 'Fermer' : 'Qualifier mon projet'}
-        </button>
-      </div>
+      <button
+        ref={triggerRef}
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-controls="lvif-chat"
+        className="pill pill-lime fixed bottom-5 right-5 z-[130] shadow-[0_16px_40px_rgba(13,13,13,0.18)] md:bottom-7 md:right-7"
+      >
+        <span>{open ? 'Fermer' : 'Qualifier mon projet'}</span>
+        <span className="pill__badge">
+          <svg viewBox="0 0 16 16" className="h-4 w-4" aria-hidden="true" fill="none">
+            {open ? (
+              <path
+                d="M4 4l8 8M12 4l-8 8"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            ) : (
+              <path
+                d="M2.5 8c0-2.8 2.5-5 5.5-5s5.5 2.2 5.5 5-2.5 5-5.5 5c-.7 0-1.4-.1-2-.3L3 14l.6-2.1A4.8 4.8 0 0 1 2.5 8Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+              />
+            )}
+          </svg>
+        </span>
+      </button>
 
-      {/* Panneau */}
       <div
         id="lvif-chat"
-        ref={panelRef}
         role="dialog"
-        aria-modal="false"
         aria-label="Assistant de qualification LED Visual Innovation"
         hidden={!open}
-        className="fixed inset-x-3 bottom-24 z-[130] flex max-h-[min(34rem,72svh)] flex-col border border-hairline bg-ink-panel shadow-[0_30px_90px_rgba(0,0,0,0.7)] sm:inset-x-auto sm:right-7 sm:w-[24.5rem] md:bottom-28"
+        className="fixed inset-x-3 bottom-[5.5rem] z-[130] flex max-h-[min(34rem,70svh)] flex-col overflow-hidden rounded-[26px] bg-white shadow-[0_30px_80px_rgba(13,13,13,0.22)] sm:inset-x-auto sm:right-7 sm:w-[24rem] md:bottom-[6.5rem]"
       >
-        <header className="flex items-start justify-between gap-4 border-b border-hairline p-5">
+        <header className="flex items-start justify-between gap-4 bg-ink px-5 py-4 text-white">
           <div>
-            <p className="slug slug-signal">Assistant commercial</p>
-            <p className="mt-2 font-[family-name:var(--font-display)] text-base font-semibold [font-stretch:110%]">
+            <p className="text-[0.68rem] font-bold uppercase tracking-[0.14em] text-lime">
+              Assistant commercial
+            </p>
+            <p className="mt-1.5 font-[family-name:var(--font-display)] text-base font-bold">
               Qualification de projet
             </p>
           </div>
           <button
             type="button"
             onClick={reset}
-            className="shrink-0 font-[family-name:var(--font-mono)] text-[0.6rem] uppercase tracking-[0.12em] text-bone-faint transition-colors hover:text-signal"
+            className="shrink-0 text-[0.7rem] font-semibold text-white/60 transition-colors hover:text-lime"
           >
             Recommencer
           </button>
@@ -201,9 +193,8 @@ export default function QualifChat() {
 
         <div
           ref={logRef}
-          className="no-scrollbar flex-1 space-y-3 overflow-y-auto p-5"
+          className="no-scrollbar flex-1 space-y-2.5 overflow-y-auto bg-paper-2 p-4"
           aria-live="polite"
-          aria-atomic="false"
         >
           {messages.map((message, index) => (
             <div
@@ -211,10 +202,10 @@ export default function QualifChat() {
               className={`flex ${message.from === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[88%] px-4 py-3 text-[0.86rem] leading-relaxed ${
+                className={`max-w-[88%] rounded-[18px] px-4 py-3 text-[0.86rem] leading-relaxed ${
                   message.from === 'user'
-                    ? 'bg-signal text-black'
-                    : 'border border-hairline bg-ink text-bone-dim'
+                    ? 'rounded-br-[6px] bg-lime text-ink'
+                    : 'rounded-bl-[6px] bg-white text-body'
                 }`}
               >
                 <p>{message.text}</p>
@@ -225,7 +216,7 @@ export default function QualifChat() {
                       setOpen(false);
                       router.push('/devis');
                     }}
-                    className="btn btn-signal mt-4 w-full justify-center"
+                    className="mt-4 w-full rounded-full bg-ink px-4 py-3 text-[0.8rem] font-bold text-paper"
                   >
                     Ouvrir le devis pré-rempli
                   </button>
@@ -236,13 +227,13 @@ export default function QualifChat() {
         </div>
 
         {step !== 'done' && (
-          <div className="flex flex-wrap gap-2 border-t border-hairline px-5 py-4">
+          <div className="flex flex-wrap gap-2 border-t border-line bg-white px-4 py-3">
             {currentOptions().map((option) => (
               <button
                 key={option.label}
                 type="button"
                 onClick={() => advance(option.value, option.label)}
-                className="min-h-[38px] border border-hairline px-3 py-2 font-[family-name:var(--font-mono)] text-[0.62rem] uppercase tracking-[0.1em] text-bone-dim transition-colors hover:border-signal hover:text-signal"
+                className="min-h-[38px] rounded-full border border-line-strong px-3.5 py-2 text-[0.75rem] font-semibold text-ink transition-colors hover:border-ink hover:bg-lime"
               >
                 {option.label}
               </button>
@@ -250,7 +241,7 @@ export default function QualifChat() {
           </div>
         )}
 
-        <form onSubmit={onSubmit} className="flex gap-2 border-t border-hairline p-4">
+        <form onSubmit={onSubmit} className="flex gap-2 border-t border-line bg-white p-3">
           <label htmlFor="lvif-chat-input" className="sr-only">
             Poser une question
           </label>
@@ -261,25 +252,26 @@ export default function QualifChat() {
             onChange={(event) => setDraft(event.target.value)}
             placeholder="Une question ? Écrivez ici."
             autoComplete="off"
-            className="field min-h-[44px] flex-1 text-[0.86rem]"
+            className="field min-h-[44px] flex-1 rounded-full text-[0.86rem]"
           />
           <button
             type="submit"
-            className="flex h-[44px] w-[44px] shrink-0 items-center justify-center border border-hairline text-signal transition-colors hover:border-signal"
+            className="grid h-[44px] w-[44px] shrink-0 place-items-center rounded-full bg-ink text-lime"
             aria-label="Envoyer"
           >
             <svg viewBox="0 0 20 20" className="h-4 w-4" aria-hidden="true" fill="none">
               <path
                 d="M3 10h13M11 5l5 5-5 5"
                 stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="square"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </button>
         </form>
 
-        <p className="border-t border-hairline px-5 py-3 font-[family-name:var(--font-mono)] text-[0.58rem] uppercase leading-relaxed tracking-[0.1em] text-bone-faint">
+        <p className="border-t border-line bg-white px-5 py-2.5 text-[0.65rem] text-faint">
           Qualification et orientation uniquement · aucun envoi automatique
         </p>
       </div>

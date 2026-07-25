@@ -1,37 +1,120 @@
-import Link from 'next/link';
 import Image from 'next/image';
-import ScrollVideoHero from '@/components/scroll-video-hero';
-import ClientMarquee from '@/components/client-marquee';
+import ScrollSequence from '@/components/scroll-sequence';
+import HeroOverlay from '@/components/hero-overlay';
+import TrustMarquee from '@/components/trust-marquee';
 import SectionHead from '@/components/section-head';
 import Reveal from '@/components/reveal';
 import Counter from '@/components/counter';
 import ProjectCard from '@/components/project-card';
 import FaqList from '@/components/faq-list';
 import CoverageMap from '@/components/coverage-map';
-import { keyFigures, pillars, ranges, projects, sectors } from '@/lib/content';
+import ArrowPill from '@/components/arrow-pill';
+import { keyFigures, pillars, ranges, projects, useCases } from '@/lib/content';
 
 export default function HomePage() {
-  const featured = projects.slice(0, 5);
+  const featured = projects.slice(0, 6);
 
   return (
     <>
-      <ScrollVideoHero />
+      <ScrollSequence>
+        <HeroOverlay />
+      </ScrollSequence>
 
-      <ClientMarquee />
-
-      {/* — Chiffres clés ————————————————————————————————— */}
-      <section className="shell py-24 md:py-36">
+      {/* — Usages ——————————————————————————————————————— */}
+      <section className="shell py-20 md:py-28">
         <SectionHead
-          index="01"
-          label="Repères"
-          title="Une trajectoire mesurable, pas une promesse."
-          lede="Sept ans d’exploitation, un atelier de 11 000 m² à moins d’une heure de Paris, et des installations livrées dans toute l’Europe. Les chiffres qui suivent sont ceux du groupe."
+          center
+          eyebrow="Vous souhaitez ?"
+          title="Un dispositif pensé pour votre contexte"
+          lead="Salons, plateaux TV, fan zones, conférences, façades commerciales : chaque usage impose sa configuration de pitch, de luminosité et de fixation."
         />
 
-        <div className="mt-16 grid gap-px border border-hairline bg-hairline sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {useCases.map((item, index) => (
+            <Reveal key={item.title} delay={(index % 3) * 80}>
+              <a href={item.href} target="_blank" rel="noreferrer noopener" className="group block">
+                <div className="card-media aspect-[4/3]">
+                  <Image
+                    src={item.image}
+                    alt={item.alt}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                  />
+                </div>
+                <div className="mt-5 flex items-start justify-between gap-4 px-1">
+                  <h3 className="d3 max-w-[16ch]">{item.title}</h3>
+                  <span className="mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink text-paper transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-45">
+                    <svg viewBox="0 0 16 16" className="h-4 w-4" aria-hidden="true" fill="none">
+                      <path
+                        d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* — Notre métier ————————————————————————————————— */}
+      <section className="bg-ink py-20 text-white md:py-28">
+        <div className="shell">
+          <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-14">
+            <div className="lg:col-span-7">
+              <Reveal>
+                <p className="eyebrow text-lime">Notre métier</p>
+              </Reveal>
+              <Reveal delay={70}>
+                <h2 className="d2 mt-4 max-w-[16ch] text-white">
+                  Quatre engagements qui tiennent après la signature
+                </h2>
+              </Reveal>
+            </div>
+            <div className="lg:col-span-5">
+              <Reveal delay={130}>
+                <p className="lead text-white/70">
+                  La plupart des acteurs du secteur revendent des dalles importées sous marque
+                  blanche. Nous maîtrisons l’assemblage, le logiciel et le service après-vente —
+                  les trois endroits où un projet d’affichage échoue habituellement.
+                </p>
+              </Reveal>
+            </div>
+          </div>
+
+          <div className="mt-14 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {pillars.map((pillar, index) => (
+              <Reveal
+                key={pillar.index}
+                delay={index * 80}
+                className="rounded-[26px] bg-white/[0.06] p-8 transition-colors duration-500 hover:bg-white/[0.11]"
+              >
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-lime font-[family-name:var(--font-display)] text-sm font-extrabold text-ink">
+                  {pillar.index}
+                </span>
+                <h3 className="d3 mt-6 text-white">{pillar.title}</h3>
+                <p className="mt-4 text-[0.92rem] leading-relaxed text-white/65">{pillar.body}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* — Chiffres ————————————————————————————————————— */}
+      <section className="shell py-20 md:py-28">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {keyFigures.map((figure, index) => (
-            <Reveal key={figure.label} delay={index * 90} className="bg-ink p-8 md:p-10">
-              <p className="numeral text-[clamp(3rem,6vw,4.75rem)] text-bone">
+            <Reveal
+              key={figure.label}
+              delay={index * 80}
+              className="rounded-[26px] bg-tile p-8 md:p-9"
+            >
+              <p className="stat text-[clamp(2.4rem,4.4vw,3.4rem)] text-ink">
                 <Counter
                   value={figure.value}
                   decimals={figure.decimals || 0}
@@ -39,223 +122,133 @@ export default function HomePage() {
                   suffix={figure.suffix || ''}
                 />
               </p>
-              <p className="mt-5 max-w-[22ch] text-[0.95rem] leading-snug text-bone">
+              <p className="mt-5 max-w-[20ch] font-semibold leading-snug text-ink">
                 {figure.label}
               </p>
-              <p className="mt-3 font-[family-name:var(--font-mono)] text-[0.65rem] uppercase leading-relaxed tracking-[0.12em] text-bone-faint">
-                {figure.note}
-              </p>
+              <p className="mt-2 text-[0.85rem] leading-relaxed text-muted">{figure.note}</p>
             </Reveal>
           ))}
         </div>
       </section>
 
-      {/* — Différenciants ——————————————————————————————— */}
-      <section className="relative overflow-hidden border-y border-hairline bg-ink-raised">
-        <div className="pixelfield pointer-events-none absolute inset-0 opacity-30" />
-        <div className="shell relative py-24 md:py-36">
-          <SectionHead
-            index="02"
-            label="Ce qui nous distingue"
-            title="Quatre engagements qui tiennent après la signature."
-            lede="La plupart des acteurs du secteur revendent des dalles importées sous marque blanche. Nous maîtrisons l’assemblage, le logiciel et le service après-vente — les trois endroits où un projet d’affichage échoue habituellement."
-          />
-
-          <div className="mt-16 grid gap-px border border-hairline bg-hairline md:grid-cols-2">
-            {pillars.map((pillar, index) => (
-              <Reveal
-                key={pillar.index}
-                delay={index * 80}
-                className="group bg-ink-raised p-9 transition-colors duration-500 hover:bg-ink md:p-12"
-              >
-                <p className="numeral text-[2.5rem] text-signal transition-transform duration-500 group-hover:translate-x-1">
-                  {pillar.index}
-                </p>
-                <h3 className="display-md mt-6">{pillar.title}</h3>
-                <p className="mt-5 max-w-[46ch] leading-relaxed text-bone-dim">{pillar.body}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* — Gammes ———————————————————————————————————————— */}
-      <section className="shell py-24 md:py-36">
+      <section className="shell py-20 md:py-28">
         <SectionHead
-          index="03"
-          label="Gammes"
-          title="Un écran par usage, jamais un catalogue générique."
-          lede="Luminosité ambiante, distance de vision, fréquence d’utilisation, contraintes climatiques : chaque paramètre oriente la configuration. Voici les six familles couvertes."
+          eyebrow="Nos écrans"
+          title="Tous nos écrans géants LED"
+          lead="Six familles couvrant l’achat comme la location, de la vitrine de commerce au dispositif de stade."
           aside={
-            <Link href="/catalogue" className="btn btn-ghost mt-8">
-              Explorer le catalogue
-            </Link>
+            <ArrowPill href="/catalogue" variant="outline" className="mt-8">
+              Voir le catalogue
+            </ArrowPill>
           }
         />
 
-        <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {ranges.map((range, index) => (
-            <Reveal key={range.slug} delay={(index % 3) * 90}>
-              <Link
-                href={`/catalogue#${range.slug}`}
-                className="group flex h-full flex-col border border-hairline bg-ink-raised transition-colors duration-500 hover:border-signal/60"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden">
+            <Reveal key={range.slug} delay={(index % 3) * 80}>
+              <a href={`/catalogue#${range.slug}`} className="group flex h-full flex-col">
+                <div className="card-media aspect-[16/11]">
                   <Image
                     src={range.image}
                     alt={range.alt}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                    className="object-cover grayscale-[0.4] transition-[transform,filter] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05] group-hover:grayscale-0"
+                    className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                   />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-raised to-transparent opacity-80" />
                 </div>
-                <div className="flex flex-1 flex-col p-7">
-                  <p className="slug slug-signal">{range.kicker}</p>
-                  <h3 className="display-md mt-4">{range.title}</h3>
-                  <p className="mt-4 flex-1 text-[0.95rem] leading-relaxed text-bone-dim">
+                <div className="flex flex-1 flex-col px-1 pt-5">
+                  <p className="text-[0.75rem] font-bold uppercase tracking-[0.1em] text-muted">
+                    {range.kicker}
+                  </p>
+                  <h3 className="d3 mt-2.5">{range.title}</h3>
+                  <p className="mt-3 flex-1 text-[0.92rem] leading-relaxed text-muted">
                     {range.summary}
                   </p>
-                  <ul className="mt-6 flex flex-wrap gap-2">
+                  <ul className="mt-5 flex flex-wrap gap-2">
                     {range.specs.map((spec) => (
                       <li
                         key={spec}
-                        className="border border-hairline px-2.5 py-1 font-[family-name:var(--font-mono)] text-[0.6rem] uppercase tracking-[0.12em] text-bone-faint"
+                        className="rounded-full bg-tile px-3 py-1.5 text-[0.72rem] font-semibold text-muted"
                       >
                         {spec}
                       </li>
                     ))}
                   </ul>
                 </div>
-              </Link>
+              </a>
             </Reveal>
           ))}
         </div>
       </section>
 
+      <TrustMarquee />
+
       {/* — Réalisations ——————————————————————————————————— */}
-      <section className="relative border-y border-hairline bg-ink-raised">
-        <div className="shell py-24 md:py-36">
-          <SectionHead
-            index="04"
-            label="Réalisations"
-            title="Les références ne mentent pas."
-            lede="Stades, concessions, enseignes, salons, fan zones, plateaux TV. Une sélection parmi plus de 1 400 installations livrées depuis 2018."
-            aside={
-              <Link href="/realisations" className="btn btn-ghost mt-8">
-                Toutes les réalisations
-              </Link>
-            }
-          />
+      <section className="shell py-20 md:py-28">
+        <SectionHead
+          eyebrow="Réalisations"
+          title="Nos dernières installations"
+          lead="Stades, concessions, enseignes, salons, fan zones, plateaux TV. Une sélection parmi plus de 1 400 installations livrées depuis 2018."
+          aside={
+            <ArrowPill href="/realisations" variant="outline" className="mt-8">
+              Toutes les réalisations
+            </ArrowPill>
+          }
+        />
 
-          <div className="mt-16 grid gap-8 lg:grid-cols-12">
-            <Reveal className="lg:col-span-7">
-              <ProjectCard project={featured[0]} priority size="wide" />
+        <div className="mt-14 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {featured.map((project, index) => (
+            <Reveal key={`${project.client}-${project.year}`} delay={(index % 3) * 80}>
+              <ProjectCard project={project} priority={index < 3} />
             </Reveal>
-            <Reveal delay={100} className="lg:col-span-5">
-              <ProjectCard project={featured[1]} size="wide" />
-            </Reveal>
-            {featured.slice(2).map((project, index) => (
-              <Reveal key={project.client} delay={index * 90} className="lg:col-span-4">
-                <ProjectCard project={project} />
-              </Reveal>
-            ))}
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* — Secteurs ————————————————————————————————————— */}
-      <section className="shell py-24 md:py-36">
-        <div className="grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <Reveal>
-              <p className="slug flex items-center gap-4">
-                <span className="slug-signal">05</span>
-                <span className="inline-block h-px w-10 bg-hairline" />
-                Secteurs
-              </p>
-            </Reveal>
-            <Reveal delay={80}>
-              <h2 className="display-lg mt-7 max-w-[15ch]">
-                Huit contextes, une même méthode.
-              </h2>
-            </Reveal>
-            <Reveal delay={140}>
-              <p className="lede mt-8">
-                Nous analysons la luminosité ambiante, la distance de vision, l’environnement
-                climatique et les contraintes du site avant de proposer une configuration. Jamais
-                l’inverse.
-              </p>
-            </Reveal>
-          </div>
-
-          <div className="lg:col-span-7">
-            <ul className="border-t border-hairline">
-              {sectors.map((sector, index) => (
-                <Reveal
-                  as="li"
-                  key={sector}
-                  delay={index * 55}
-                  className="group flex items-baseline gap-6 border-b border-hairline py-6"
-                >
-                  <span className="slug w-8 shrink-0 transition-colors group-hover:text-signal">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <span className="display-md flex-1 text-bone-dim transition-colors duration-300 group-hover:text-bone">
-                    {sector}
-                  </span>
-                </Reveal>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* — Implantation ——————————————————————————————————— */}
-      <CoverageMap index="06" />
+      <CoverageMap />
 
       {/* — FAQ ————————————————————————————————————————— */}
-      <section className="relative border-t border-hairline bg-ink-raised">
-        <div className="shell py-24 md:py-36">
-          <SectionHead
-            index="07"
-            label="Questions fréquentes"
-            title="Ce qu’un acheteur doit vérifier avant de signer."
-            lede="Le nombre d’années de garantie affiché ne dit rien de ce qu’il couvre réellement. Ces six réponses reprennent les points sur lesquels les offres du marché divergent le plus."
-          />
-          <div className="mt-14">
-            <FaqList />
-          </div>
+      <section className="shell py-20 md:py-28">
+        <SectionHead
+          center
+          eyebrow="Foire aux questions"
+          title="Ce qu’un acheteur doit vérifier avant de signer"
+        />
+        <div className="mx-auto mt-12 max-w-4xl">
+          <FaqList />
         </div>
       </section>
 
       {/* — Appel à l'action ——————————————————————————————— */}
-      <section className="relative overflow-hidden border-t border-hairline">
-        <div className="pixelfield pointer-events-none absolute inset-0 opacity-40" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-signal-wash/40 to-transparent" />
-        <div className="shell relative py-28 text-center md:py-40">
+      <section className="shell pb-24 md:pb-32">
+        <div className="relative overflow-hidden rounded-[var(--radius-xl2)] bg-ink px-8 py-16 text-center md:px-16 md:py-24">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-lime/25 blur-3xl"
+          />
           <Reveal>
-            <p className="slug slug-signal">Prochaine étape</p>
+            <p className="eyebrow text-lime">Une question ? Un besoin ?</p>
           </Reveal>
-          <Reveal delay={90}>
-            <h2 className="display-xl mx-auto mt-8 max-w-[14ch]">
-              Parlons de votre surface.
+          <Reveal delay={80}>
+            <h2 className="d2 mx-auto mt-5 max-w-[16ch] text-white">
+              Notre équipe vous recontacte sous 24 h
             </h2>
           </Reveal>
-          <Reveal delay={160}>
-            <p className="lede mx-auto mt-8 text-center">
+          <Reveal delay={140}>
+            <p className="lead mx-auto mt-6 text-white/70">
               Décrivez votre projet en quelques champs. Un technicien vous rappelle avec une
-              estimation chiffrée, sans engagement.
+              configuration chiffrée, sans engagement.
             </p>
           </Reveal>
-          <Reveal delay={220}>
-            <div className="mt-11 flex flex-wrap justify-center gap-3">
-              <Link href="/devis" className="btn btn-signal">
+          <Reveal delay={200}>
+            <div className="mt-10 flex flex-wrap justify-center gap-3">
+              <ArrowPill href="/devis" variant="lime">
                 Demander un devis
-              </Link>
-              <Link href="/realisations" className="btn btn-ghost">
+              </ArrowPill>
+              <ArrowPill href="/realisations" variant="ghost-dark">
                 Voir nos installations
-              </Link>
+              </ArrowPill>
             </div>
           </Reveal>
         </div>

@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import PageHero from '@/components/page-hero';
 import Reveal from '@/components/reveal';
 import ProjectFilter from '@/components/project-filter';
-import ClientMarquee from '@/components/client-marquee';
+import TrustMarquee from '@/components/trust-marquee';
 import CoverageMap from '@/components/coverage-map';
+import ArrowPill from '@/components/arrow-pill';
 import { projects } from '@/lib/content';
 
 export const metadata = {
@@ -16,10 +16,9 @@ export default function RealisationsPage() {
   return (
     <>
       <PageHero
-        index="B"
-        label="Réalisations"
-        title="La preuve avant le discours."
-        lede="Une entreprise d’affichage dynamique se juge sur ses installations, pas sur sa page d’accueil. Voici une sélection vérifiable, avec le client, la ville et l’année."
+        eyebrow="Réalisations"
+        title="La preuve avant le discours"
+        lead="Une entreprise d’affichage dynamique se juge sur ses installations, pas sur sa page d’accueil. Voici une sélection vérifiable, avec le client, la ville et l’année."
         meta={[
           { label: 'Installations', value: '+1 400' },
           { label: 'Déployé en 2025', value: '2 160 m²' },
@@ -27,28 +26,27 @@ export default function RealisationsPage() {
         ]}
       />
 
-      <section className="shell py-20 md:py-28">
+      <section className="shell pb-20 md:pb-28">
         <ProjectFilter projects={projects} />
       </section>
 
-      <ClientMarquee />
+      <TrustMarquee />
 
-      <CoverageMap index="C" />
+      <CoverageMap />
 
-      <section className="relative overflow-hidden border-t border-hairline">
-        <div className="pixelfield pointer-events-none absolute inset-0 opacity-40" />
-        <div className="shell relative py-24 text-center md:py-32">
-          <Reveal>
-            <h2 className="display-lg mx-auto max-w-[16ch]">
-              Votre installation peut rejoindre cette liste.
-            </h2>
-          </Reveal>
-          <Reveal delay={120}>
-            <Link href="/devis" className="btn btn-signal mt-10">
+      <section className="shell pb-24 text-center md:pb-32">
+        <Reveal>
+          <h2 className="d2 mx-auto max-w-[15ch]">
+            Votre installation peut rejoindre cette liste
+          </h2>
+        </Reveal>
+        <Reveal delay={110}>
+          <div className="mt-9 flex justify-center">
+            <ArrowPill href="/devis" variant="lime">
               Décrire mon projet
-            </Link>
-          </Reveal>
-        </div>
+            </ArrowPill>
+          </div>
+        </Reveal>
       </section>
     </>
   );

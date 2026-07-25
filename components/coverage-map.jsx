@@ -1,28 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import Reveal from './reveal';
+import ArrowPill from './arrow-pill';
 
 /**
  * Carte d'implantation.
- *
  * Rendu vectoriel maison plutôt qu'un embed Google Maps : pas de clé d'API,
- * pas de tuile externe à charger, et un rendu conforme à la charte sombre.
- * Les coordonnées sont projetées en Mercator simplifiée sur la fenêtre
- * Europe de l'Ouest.
+ * pas de tuile externe, et un rendu conforme à la charte.
  */
 
 const SITES = [
   { name: 'Paris', lat: 48.8566, lon: 2.3522, hub: true, dy: -11 },
-  {
-    name: 'Saint-Rémy-sur-Avre',
-    lat: 48.7673,
-    lon: 1.2451,
-    hub: true,
-    side: 'left',
-    dy: 18,
-  },
+  { name: 'Saint-Rémy-sur-Avre', lat: 48.7673, lon: 1.2451, hub: true, side: 'left', dy: 18 },
   { name: 'Lille', lat: 50.6292, lon: 3.0573 },
   { name: 'Reims', lat: 49.2583, lon: 4.0317, dy: 14 },
   { name: 'Strasbourg', lat: 48.5734, lon: 7.7521, side: 'left' },
@@ -38,7 +28,6 @@ const SITES = [
   { name: 'Luxembourg', lat: 49.6116, lon: 6.1319, side: 'left', dy: -6 },
 ];
 
-/* Fenêtre géographique et projection */
 const BOUNDS = { minLon: -5.6, maxLon: 9.2, minLat: 41.8, maxLat: 51.6 };
 const W = 620;
 const H = 700;
@@ -48,7 +37,6 @@ const project = ({ lat, lon }) => ({
   y: ((BOUNDS.maxLat - lat) / (BOUNDS.maxLat - BOUNDS.minLat)) * H,
 });
 
-/* Contour simplifié de la France métropolitaine, en degrés (lon, lat) */
 const OUTLINE = [
   [2.55, 51.09], [3.15, 50.79], [4.23, 50.69], [5.9, 49.5], [6.36, 49.46],
   [8.23, 48.97], [7.59, 47.59], [6.77, 47.29], [6.04, 46.42], [7.05, 45.93],
@@ -64,20 +52,17 @@ const outlinePath = `${OUTLINE.map(([lon, lat], index) => {
   return `${index === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
 }).join(' ')} Z`;
 
-export default function CoverageMap({ index = '06' }) {
+export default function CoverageMap() {
   const [active, setActive] = useState('Paris');
   const current = SITES.find((site) => site.name === active) || SITES[0];
 
   return (
-    <section className="relative overflow-hidden border-y border-hairline bg-ink-raised">
-      <div className="pixelfield pointer-events-none absolute inset-0 opacity-25" />
-
-      <div className="shell relative py-24 md:py-32">
-        <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
-          {/* Carte */}
+    <section className="shell py-20 md:py-28">
+      <div className="overflow-hidden rounded-[var(--radius-xl2)] bg-tile">
+        <div className="grid gap-10 p-6 md:p-10 lg:grid-cols-12 lg:items-center lg:gap-14 lg:p-14">
           <div className="lg:col-span-6">
             <Reveal>
-              <div className="relative border border-hairline bg-ink p-4 md:p-6">
+              <div className="overflow-hidden rounded-[26px] bg-white p-4 md:p-6">
                 <svg
                   viewBox={`0 0 ${W} ${H}`}
                   className="h-auto w-full"
@@ -86,16 +71,11 @@ export default function CoverageMap({ index = '06' }) {
                 >
                   <defs>
                     <pattern id="lvif-grid" width="26" height="26" patternUnits="userSpaceOnUse">
-                      <path
-                        d="M26 0H0V26"
-                        fill="none"
-                        stroke="var(--color-hairline-soft)"
-                        strokeWidth="1"
-                      />
+                      <path d="M26 0H0V26" fill="none" stroke="#eeeeea" strokeWidth="1" />
                     </pattern>
                     <radialGradient id="lvif-glow" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="var(--color-signal)" stopOpacity="0.35" />
-                      <stop offset="100%" stopColor="var(--color-signal)" stopOpacity="0" />
+                      <stop offset="0%" stopColor="var(--color-lime)" stopOpacity="0.55" />
+                      <stop offset="100%" stopColor="var(--color-lime)" stopOpacity="0" />
                     </radialGradient>
                   </defs>
 
@@ -103,16 +83,15 @@ export default function CoverageMap({ index = '06' }) {
 
                   <path
                     d={outlinePath}
-                    fill="var(--color-ink-panel)"
-                    stroke="var(--color-hairline)"
+                    fill="#f4f4f2"
+                    stroke="#dcdcd6"
                     strokeWidth="1.5"
                     strokeLinejoin="round"
                   />
 
-                  {/* Halo autour du point actif */}
                   {(() => {
                     const { x, y } = project(current);
-                    return <circle cx={x} cy={y} r="86" fill="url(#lvif-glow)" />;
+                    return <circle cx={x} cy={y} r="88" fill="url(#lvif-glow)" />;
                   })()}
 
                   {SITES.map((site) => {
@@ -127,29 +106,28 @@ export default function CoverageMap({ index = '06' }) {
                             cy={y}
                             r={isActive ? 13 : 10}
                             fill="none"
-                            stroke="var(--color-signal)"
+                            stroke="var(--color-ink)"
                             strokeWidth="1"
-                            opacity={isActive ? 0.9 : 0.4}
+                            opacity={isActive ? 0.75 : 0.3}
                           />
                         )}
                         <circle
                           cx={x}
                           cy={y}
-                          r={isActive ? 5.5 : site.hub ? 4.5 : 3.5}
-                          fill={isActive || site.hub ? 'var(--color-signal)' : 'var(--color-bone-faint)'}
+                          r={isActive ? 6 : site.hub ? 5 : 3.5}
+                          fill={isActive ? 'var(--color-ink)' : site.hub ? '#4a4a4a' : '#9b9895'}
                         />
                         <text
                           x={left ? x - 12 : x + 12}
                           y={y + (site.dy ?? 4)}
                           textAnchor={left ? 'end' : 'start'}
                           fontSize="13"
-                          fontFamily="var(--font-mono)"
-                          letterSpacing="0.06em"
-                          fill={isActive ? 'var(--color-bone)' : 'var(--color-bone-faint)'}
+                          fontWeight={isActive ? 700 : 500}
+                          fontFamily="var(--font-sans)"
+                          fill={isActive ? 'var(--color-ink)' : '#8b8885'}
                         >
                           {site.name}
                         </text>
-                        {/* Zone de clic élargie pour le tactile */}
                         <circle
                           cx={x}
                           cy={y}
@@ -174,10 +152,10 @@ export default function CoverageMap({ index = '06' }) {
                       type="button"
                       onClick={() => setActive(site.name)}
                       aria-pressed={site.name === active}
-                      className={`min-h-[36px] border px-3 py-1.5 font-[family-name:var(--font-mono)] text-[0.62rem] uppercase tracking-[0.1em] transition-colors ${
+                      className={`min-h-[38px] rounded-full px-3.5 py-2 text-[0.75rem] font-semibold transition-colors ${
                         site.name === active
-                          ? 'border-signal text-signal'
-                          : 'border-hairline text-bone-faint hover:border-bone-faint hover:text-bone-dim'
+                          ? 'bg-ink text-paper'
+                          : 'bg-white text-muted hover:text-ink'
                       }`}
                     >
                       {site.name}
@@ -188,48 +166,43 @@ export default function CoverageMap({ index = '06' }) {
             </Reveal>
           </div>
 
-          {/* Texte */}
           <div className="lg:col-span-6">
             <Reveal>
-              <p className="slug flex items-center gap-4">
-                <span className="slug-signal">{index}</span>
-                <span className="inline-block h-px w-10 bg-hairline" />
-                Implantation
-              </p>
+              <p className="eyebrow">Implantation</p>
             </Reveal>
             <Reveal delay={80}>
-              <h2 className="display-lg mt-7 max-w-[14ch]">
-                Une implantation nationale et internationale.
+              <h2 className="d2 mt-4 max-w-[13ch]">
+                Une implantation nationale et internationale
               </h2>
             </Reveal>
             <Reveal delay={140}>
-              <p className="lede mt-8">
+              <p className="lead mt-6">
                 LED Visual Innovation intervient dans toute la France, notamment à Paris, Lyon,
                 Lille, Marseille, Nantes, Toulouse et Bordeaux, pour accompagner les entreprises,
                 collectivités et organisateurs d’événements dans leurs projets d’affichage LED.
               </p>
             </Reveal>
             <Reveal delay={190}>
-              <p className="lede mt-5">
+              <p className="lead mt-4">
                 Nous réalisons également des installations à l’étranger, notamment en Suisse, au
-                Luxembourg et en Allemagne, sur des événements nécessitant une logistique maîtrisée
-                et un haut niveau d’exigence technique.
+                Luxembourg et en Allemagne, sur des événements nécessitant une logistique
+                maîtrisée et un haut niveau d’exigence technique.
               </p>
             </Reveal>
 
             <Reveal delay={240}>
-              <dl className="mt-10 grid gap-px border border-hairline bg-hairline sm:grid-cols-2">
-                <div className="bg-ink-raised p-6">
-                  <dt className="slug">Siège social</dt>
-                  <dd className="mt-3 text-[0.95rem] leading-relaxed text-bone-dim">
+              <dl className="mt-9 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-[22px] bg-white p-6">
+                  <dt className="eyebrow">Siège social</dt>
+                  <dd className="mt-3 leading-relaxed text-ink">
                     49 rue de Ponthieu
                     <br />
                     75008 Paris
                   </dd>
                 </div>
-                <div className="bg-ink-raised p-6">
-                  <dt className="slug">Centre logistique</dt>
-                  <dd className="mt-3 text-[0.95rem] leading-relaxed text-bone-dim">
+                <div className="rounded-[22px] bg-white p-6">
+                  <dt className="eyebrow">Centre logistique</dt>
+                  <dd className="mt-3 leading-relaxed text-ink">
                     15 rue de l’Ancienne
                     <br />
                     28380 Saint-Rémy-sur-Avre
@@ -239,15 +212,9 @@ export default function CoverageMap({ index = '06' }) {
             </Reveal>
 
             <Reveal delay={290}>
-              <p className="mt-8 font-[family-name:var(--font-mono)] text-[0.68rem] uppercase leading-relaxed tracking-[0.12em] text-bone-faint">
-                Depuis 2018 · plus de 1 400 installations · 2 160 m² déployés en 2025
-              </p>
-            </Reveal>
-
-            <Reveal delay={330}>
-              <Link href="/devis" className="btn btn-signal mt-8">
+              <ArrowPill href="/devis" variant="lime" className="mt-8">
                 Nous contacter
-              </Link>
+              </ArrowPill>
             </Reveal>
           </div>
         </div>

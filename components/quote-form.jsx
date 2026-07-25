@@ -110,17 +110,17 @@ export default function QuoteForm() {
       <div
         id="devis-confirmation"
         tabIndex={-1}
-        className="border border-signal/50 bg-ink-raised p-10 md:p-14"
+        className="bg-tile p-10 md:p-14"
       >
-        <p className="slug slug-signal">Récapitulatif</p>
-        <h2 className="display-lg mt-6 max-w-[16ch]">Votre demande est prête à être envoyée.</h2>
-        <p className="lede mt-7">
+        <p className="eyebrow">Récapitulatif</p>
+        <h2 className="d2 mt-6 max-w-[16ch]">Votre demande est prête à être envoyée.</h2>
+        <p className="lead mt-7">
           Ce prototype ne transmet aucune donnée : rien n’a été envoyé et rien n’a été enregistré.
           Sur le site en production, cette étape déclencherait la prise en charge par un technicien
           et un rappel sous 24 h ouvrées.
         </p>
 
-        <dl className="mt-10 grid gap-px border border-hairline bg-hairline sm:grid-cols-2">
+        <dl className="mt-10 grid gap-3 sm:grid-cols-2">
           {[
             ['Formule', values.mode === 'achat' ? 'Achat' : 'Location'],
             ['Usage', values.usage === 'exterieur' ? 'Extérieur' : 'Intérieur'],
@@ -129,14 +129,14 @@ export default function QuoteForm() {
             ['Date souhaitée', values.date || 'Non précisée'],
             ['Contact', `${values.name} · ${values.company}`],
           ].map(([label, value]) => (
-            <div key={label} className="bg-ink p-5">
-              <dt className="slug">{label}</dt>
-              <dd className="mt-2 text-bone">{value}</dd>
+            <div key={label} className="rounded-2xl bg-white p-5">
+              <dt className="eyebrow">{label}</dt>
+              <dd className="mt-2 text-ink">{value}</dd>
             </div>
           ))}
         </dl>
 
-        <button type="button" onClick={() => setSent(false)} className="btn btn-ghost mt-10">
+        <button type="button" onClick={() => setSent(false)} className="rounded-full border border-line-strong px-7 py-4 text-[0.9rem] font-bold text-ink transition-colors hover:border-ink mt-10">
           Modifier ma demande
         </button>
       </div>
@@ -146,18 +146,18 @@ export default function QuoteForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-12">
       <fieldset>
-        <legend className="slug slug-signal">01 — Nature du projet</legend>
+        <legend className="eyebrow">01 — Nature du projet</legend>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <div>
-            <span className="mb-3 block text-sm text-bone-dim">Formule</span>
-            <div className="grid grid-cols-2 gap-px border border-hairline bg-hairline">
+            <span className="mb-3 block text-sm text-muted">Formule</span>
+            <div className="grid grid-cols-2 gap-3">
               {MODES.map((option) => (
                 <label
                   key={option.value}
-                  className={`cursor-pointer bg-ink px-4 py-4 text-center font-[family-name:var(--font-mono)] text-[0.65rem] uppercase tracking-[0.12em] transition-colors ${
+                  className={`cursor-pointer rounded-2xl border border-line-strong bg-white px-4 py-4 text-center text-[0.85rem] font-semibold transition-colors ${
                     values.mode === option.value
-                      ? 'bg-signal text-black'
-                      : 'text-bone-dim hover:text-bone'
+                      ? 'bg-ink text-paper'
+                      : 'text-muted hover:text-ink'
                   }`}
                 >
                   <input
@@ -175,15 +175,15 @@ export default function QuoteForm() {
           </div>
 
           <div>
-            <span className="mb-3 block text-sm text-bone-dim">Usage</span>
-            <div className="grid grid-cols-2 gap-px border border-hairline bg-hairline">
+            <span className="mb-3 block text-sm text-muted">Usage</span>
+            <div className="grid grid-cols-2 gap-3">
               {USAGES.map((option) => (
                 <label
                   key={option.value}
-                  className={`cursor-pointer bg-ink px-4 py-4 text-center font-[family-name:var(--font-mono)] text-[0.65rem] uppercase tracking-[0.12em] transition-colors ${
+                  className={`cursor-pointer rounded-2xl border border-line-strong bg-white px-4 py-4 text-center text-[0.85rem] font-semibold transition-colors ${
                     values.usage === option.value
-                      ? 'bg-signal text-black'
-                      : 'text-bone-dim hover:text-bone'
+                      ? 'bg-ink text-paper'
+                      : 'text-muted hover:text-ink'
                   }`}
                 >
                   <input
@@ -257,7 +257,7 @@ export default function QuoteForm() {
       </fieldset>
 
       <fieldset>
-        <legend className="slug slug-signal">02 — Vos coordonnées</legend>
+        <legend className="eyebrow">02 — Vos coordonnées</legend>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <Field id="field-name" label="Nom et prénom" required error={errors.name}>
             <input
@@ -327,13 +327,13 @@ export default function QuoteForm() {
       </fieldset>
 
       <div>
-        <label className="flex cursor-pointer items-start gap-3 text-sm text-bone-dim">
+        <label className="flex cursor-pointer items-start gap-3 text-sm text-muted">
           <input
             id="field-consent"
             type="checkbox"
             checked={values.consent}
             onChange={update('consent')}
-            className="mt-1 h-5 w-5 shrink-0 accent-[var(--color-signal)]"
+            className="mt-1 h-5 w-5 shrink-0 accent-[var(--color-lime)]"
             aria-describedby={errors.consent ? 'error-consent' : undefined}
           />
           <span>
@@ -341,17 +341,17 @@ export default function QuoteForm() {
           </span>
         </label>
         {errors.consent && (
-          <p id="error-consent" role="alert" className="mt-2 text-sm text-signal">
+          <p id="error-consent" role="alert" className="mt-2 text-sm text-ink">
             {errors.consent}
           </p>
         )}
       </div>
 
-      <div className="flex flex-wrap items-center gap-5 border-t border-hairline pt-8">
-        <button type="submit" className="btn btn-signal">
+      <div className="flex flex-wrap items-center gap-5 border-t border-line pt-8">
+        <button type="submit" className="rounded-full bg-ink px-7 py-4 text-[0.9rem] font-bold text-paper transition-colors hover:bg-lime hover:text-ink">
           Générer ma demande
         </button>
-        <p className="font-[family-name:var(--font-mono)] text-[0.65rem] uppercase leading-relaxed tracking-[0.12em] text-bone-faint">
+        <p className="font-[family-name:var(--font-mono)] text-[0.65rem] uppercase leading-relaxed tracking-[0.12em] text-faint">
           Prototype — aucune donnée n’est transmise ni conservée
         </p>
       </div>
@@ -362,24 +362,24 @@ export default function QuoteForm() {
 function Field({ id, label, required, error, helper, children }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-3 block text-sm text-bone-dim">
+      <label htmlFor={id} className="mb-3 block text-sm text-muted">
         {label}
         {required && (
-          <span className="ml-1 text-signal" aria-hidden="true">
+          <span className="ml-1 text-ink" aria-hidden="true">
             *
           </span>
         )}
       </label>
       {children}
       {error ? (
-        <p id={`error-${id.replace('field-', '')}`} role="alert" className="mt-2 text-sm text-signal">
+        <p id={`error-${id.replace('field-', '')}`} role="alert" className="mt-2 text-sm text-ink">
           {error}
         </p>
       ) : (
         helper && (
           <p
             id={`helper-${id.replace('field-', '')}`}
-            className="mt-2 text-[0.8rem] leading-relaxed text-bone-faint"
+            className="mt-2 text-[0.8rem] leading-relaxed text-faint"
           >
             {helper}
           </p>

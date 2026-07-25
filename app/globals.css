@@ -1,37 +1,39 @@
 @import 'tailwindcss';
 
 /* ---------------------------------------------------------------------------
-   LVIF — Système de design
-   Direction : « signal industriel éditorial ».
-   Noir profond, ambre signal, typographie grotesque étendue,
-   métadonnées en monospace, trame de pixels LED en arrière-plan.
+   LVIF — système de design
+   Aligné sur l'identité existante de led-visual-innovation.fr :
+   fond clair, encre quasi noire, accent lime, Bricolage Grotesque + Figtree,
+   pilules à badge fléché, grands rayons de courbure.
 --------------------------------------------------------------------------- */
 
 @theme {
   /* Surfaces */
-  --color-ink: #060607;
-  --color-ink-raised: #0d0d0f;
-  --color-ink-panel: #131317;
-  --color-hairline: #26262c;
-  --color-hairline-soft: #1a1a1f;
+  --color-paper: #fcfcfc;
+  --color-paper-2: #f4f4f2;
+  --color-tile: #f1f1ef;
+  --color-ink: #0d0d0d;
+  --color-ink-2: #1a1a1a;
+  --color-line: #e4e4e0;
+  --color-line-strong: #d2d2cc;
 
   /* Texte */
-  --color-bone: #f2efe8;
-  --color-bone-dim: #a6a29a;
-  --color-bone-faint: #6d6a64;
+  --color-body: #333333;
+  --color-muted: #706d6d;
+  --color-faint: #9b9895;
 
-  /* Signal */
-  --color-signal: #ffc400;
-  --color-signal-deep: #d99f00;
-  --color-signal-wash: #3a2c00;
+  /* Accent */
+  --color-lime: #c3ff3d;
+  --color-lime-deep: #a8e021;
+  --color-lime-wash: #eaffc4;
 
   /* Typographie */
-  --font-display: 'Archivo', 'Arial Narrow', sans-serif;
-  --font-body: 'Instrument Sans', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-display: 'Bricolage Grotesque', 'Arial Black', sans-serif;
+  --font-sans: 'Figtree', system-ui, sans-serif;
 
-  /* Rythme */
-  --spacing-gutter: 1.5rem;
+  /* Courbes */
+  --radius-card: 28px;
+  --radius-xl2: 40px;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -48,25 +50,24 @@
   }
 
   body {
-    background-color: var(--color-ink);
-    color: var(--color-bone);
-    font-family: var(--font-body);
+    background-color: var(--color-paper);
+    color: var(--color-body);
+    font-family: var(--font-sans);
     font-size: 1rem;
     line-height: 1.6;
-    font-feature-settings: 'ss01', 'cv01';
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 
   ::selection {
-    background: var(--color-signal);
-    color: #000;
+    background: var(--color-lime);
+    color: var(--color-ink);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-signal);
-    outline-offset: 3px;
-    border-radius: 2px;
+    outline: 3px solid var(--color-ink);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 
   h1,
@@ -74,10 +75,10 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    font-weight: 600;
-    font-stretch: 112%;
-    line-height: 0.95;
-    letter-spacing: -0.025em;
+    font-weight: 800;
+    color: var(--color-ink);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
     text-wrap: balance;
   }
 
@@ -86,184 +87,229 @@
   }
 
   img,
-  video {
+  video,
+  canvas {
     display: block;
     max-width: 100%;
   }
 }
 
 @layer components {
-  /* Conteneur éditorial : marges généreuses, largeur maîtrisée */
   .shell {
     width: 100%;
-    max-width: 1560px;
+    max-width: 1360px;
     margin-inline: auto;
-    padding-inline: 1.25rem;
+    padding-inline: 1.15rem;
   }
 
   @media (min-width: 768px) {
     .shell {
-      padding-inline: 2.5rem;
+      padding-inline: 2.25rem;
     }
   }
 
   @media (min-width: 1280px) {
     .shell {
-      padding-inline: 4.5rem;
+      padding-inline: 3rem;
     }
   }
 
-  /* Étiquette technique (index de section) */
-  .slug {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-bone-faint);
-  }
-
-  .slug-signal {
-    color: var(--color-signal);
-  }
-
-  /* Titres d'affichage */
-  .display-xl {
+  /* — Typographie d'affichage — */
+  .d1 {
     font-family: var(--font-display);
-    font-weight: 600;
-    font-stretch: 115%;
-    line-height: 0.88;
+    font-weight: 800;
+    line-height: 0.98;
     letter-spacing: -0.035em;
-    font-size: clamp(2.75rem, 9vw, 8.5rem);
+    font-size: clamp(2.5rem, 6.2vw, 5.5rem);
   }
 
-  .display-lg {
+  .d2 {
     font-family: var(--font-display);
-    font-weight: 600;
-    font-stretch: 112%;
-    line-height: 0.92;
-    letter-spacing: -0.03em;
-    font-size: clamp(2.1rem, 5.4vw, 4.75rem);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.032em;
+    font-size: clamp(2rem, 4.1vw, 3.5rem);
   }
 
-  .display-md {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-stretch: 108%;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    font-size: clamp(1.5rem, 2.6vw, 2.25rem);
-  }
-
-  .numeral {
+  .d3 {
     font-family: var(--font-display);
     font-weight: 700;
-    font-stretch: 118%;
+    line-height: 1.1;
+    letter-spacing: -0.022em;
+    font-size: clamp(1.25rem, 1.9vw, 1.65rem);
+  }
+
+  .stat {
+    font-family: var(--font-display);
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
-    line-height: 0.82;
+    line-height: 0.9;
     letter-spacing: -0.045em;
   }
 
-  .lede {
-    font-size: clamp(1.0625rem, 1.35vw, 1.375rem);
-    line-height: 1.55;
-    color: var(--color-bone-dim);
-    max-width: 62ch;
-  }
-
-  /* Filet horizontal avec accroche ambre */
-  .rule {
-    height: 1px;
-    background: var(--color-hairline);
-    position: relative;
-  }
-
-  .rule::before {
-    content: '';
-    position: absolute;
-    inset-block: 0;
-    left: 0;
-    width: 3.5rem;
-    background: var(--color-signal);
-  }
-
-  /* Trame de pixels LED */
-  .pixelfield {
-    background-image: radial-gradient(
-      circle at center,
-      color-mix(in oklab, var(--color-signal) 30%, transparent) 0.6px,
-      transparent 0.6px
-    );
-    background-size: 7px 7px;
-  }
-
-  /* Grain fin, appliqué en superposition */
-  .grain::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.035;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  /* Boutons */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    min-height: 48px;
-    padding: 0.85rem 1.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .lead {
+    font-size: clamp(1.02rem, 1.15vw, 1.2rem);
+    line-height: 1.6;
+    color: var(--color-muted);
+    max-width: 60ch;
+  }
+
+  /* — Pilules à badge fléché (signature du site actuel) — */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.45rem 0.45rem 0.45rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1;
+    min-height: 52px;
     border: 1px solid transparent;
     transition:
-      background-color 200ms var(--ease-out-expo),
-      color 200ms var(--ease-out-expo),
-      border-color 200ms var(--ease-out-expo),
-      transform 200ms var(--ease-out-expo);
+      background-color 260ms var(--ease-out-expo),
+      color 260ms var(--ease-out-expo),
+      border-color 260ms var(--ease-out-expo);
   }
 
-  .btn:active {
-    transform: translateY(1px);
+  .pill__badge {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    flex: 0 0 auto;
+    transition:
+      background-color 260ms var(--ease-out-expo),
+      transform 420ms var(--ease-out-expo);
   }
 
-  .btn-signal {
-    background: var(--color-signal);
-    color: #0a0a0a;
-    font-weight: 600;
+  .pill:hover .pill__badge {
+    transform: rotate(45deg);
   }
 
-  .btn-signal:hover {
-    background: var(--color-bone);
+  .pill-lime {
+    background: var(--color-lime);
+    color: var(--color-ink);
   }
 
-  .btn-ghost {
-    border-color: var(--color-hairline);
-    color: var(--color-bone);
+  .pill-lime .pill__badge {
+    background: var(--color-ink);
+    color: var(--color-lime);
   }
 
-  .btn-ghost:hover {
-    border-color: var(--color-signal);
-    color: var(--color-signal);
+  .pill-lime:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
 
-  /* Lien avec soulignement qui balaie */
+  .pill-lime:hover .pill__badge {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+
+  .pill-ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .pill-ink .pill__badge {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+
+  .pill-outline {
+    background: transparent;
+    border-color: var(--color-line-strong);
+    color: var(--color-ink);
+  }
+
+  .pill-outline .pill__badge {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .pill-outline:hover {
+    border-color: var(--color-ink);
+  }
+
+  .pill-ghost-dark {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+
+  .pill-ghost-dark .pill__badge {
+    background: #fff;
+    color: var(--color-ink);
+  }
+
+  .pill-ghost-dark:hover {
+    background: #fff;
+    color: var(--color-ink);
+  }
+
+  /* — Cartes — */
+  .card {
+    border-radius: var(--radius-card);
+    background: var(--color-tile);
+    overflow: hidden;
+  }
+
+  .card-media {
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    position: relative;
+    background: var(--color-tile);
+  }
+
+  .field {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 16px;
+    color: var(--color-ink);
+    padding: 0.9rem 1.1rem;
+    min-height: 52px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    transition:
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .field::placeholder {
+    color: var(--color-faint);
+  }
+
+  .field:focus {
+    outline: none;
+    border-color: var(--color-ink);
+    box-shadow: 0 0 0 4px var(--color-lime-wash);
+  }
+
+  /* Soulignement qui balaie */
   .sweep {
     position: relative;
-    display: inline-block;
   }
 
   .sweep::after {
     content: '';
     position: absolute;
     left: 0;
-    bottom: -2px;
-    height: 1px;
+    bottom: -3px;
+    height: 2px;
     width: 100%;
-    background: var(--color-signal);
+    background: currentColor;
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 420ms var(--ease-out-expo);
@@ -274,58 +320,45 @@
     transform: scaleX(1);
     transform-origin: left;
   }
-
-  .field {
-    width: 100%;
-    background: var(--color-ink-raised);
-    border: 1px solid var(--color-hairline);
-    color: var(--color-bone);
-    padding: 0.85rem 1rem;
-    min-height: 48px;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    transition: border-color 180ms ease;
-  }
-
-  .field::placeholder {
-    color: var(--color-bone-faint);
-  }
-
-  .field:hover {
-    border-color: #34343c;
-  }
-
-  .field:focus {
-    outline: none;
-    border-color: var(--color-signal);
-  }
 }
 
 @layer utilities {
-  /* Révélation au scroll (progressive enhancement : visible par défaut) */
   .reveal {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(24px);
   }
 
   .reveal-in {
     opacity: 1;
     transform: none;
     transition:
-      opacity 900ms var(--ease-out-expo),
-      transform 900ms var(--ease-out-expo);
+      opacity 800ms var(--ease-out-expo),
+      transform 800ms var(--ease-out-expo);
   }
 
-  .marquee-track {
-    animation: marquee 42s linear infinite;
+  .row-left {
+    animation: row-left 46s linear infinite;
   }
 
-  @keyframes marquee {
+  .row-right {
+    animation: row-right 52s linear infinite;
+  }
+
+  @keyframes row-left {
     from {
-      transform: translateX(0);
+      transform: translate3d(0, 0, 0);
     }
     to {
-      transform: translateX(-50%);
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes row-right {
+    from {
+      transform: translate3d(-50%, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
     }
   }
 

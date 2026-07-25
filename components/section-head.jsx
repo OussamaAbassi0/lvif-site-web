@@ -1,30 +1,46 @@
 import Reveal from './reveal';
 
-export default function SectionHead({ index, label, title, lede, aside }) {
-  return (
-    <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
-      <div className="lg:col-span-7">
-        <Reveal>
-          <p className="slug flex items-center gap-4">
-            <span className="slug-signal">{index}</span>
-            <span className="inline-block h-px w-10 bg-hairline" />
-            {label}
-          </p>
+export default function SectionHead({ eyebrow, title, lead, aside, center = false }) {
+  if (center) {
+    return (
+      <div className="text-center">
+        {eyebrow && (
+          <Reveal>
+            <p className="eyebrow">{eyebrow}</p>
+          </Reveal>
+        )}
+        <Reveal delay={70}>
+          <h2 className="d2 mx-auto mt-4 max-w-[20ch]">{title}</h2>
         </Reveal>
-        <Reveal delay={80}>
-          <h2 className="display-lg mt-7 max-w-[18ch]">{title}</h2>
+        {lead && (
+          <Reveal delay={130}>
+            <p className="lead mx-auto mt-6">{lead}</p>
+          </Reveal>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12">
+      <div className="lg:col-span-7">
+        {eyebrow && (
+          <Reveal>
+            <p className="eyebrow">{eyebrow}</p>
+          </Reveal>
+        )}
+        <Reveal delay={70}>
+          <h2 className="d2 mt-4 max-w-[17ch]">{title}</h2>
         </Reveal>
       </div>
-      {(lede || aside) && (
-        <div className="lg:col-span-5 lg:pt-14">
-          {lede && (
-            <Reveal delay={140}>
-              <p className="lede">{lede}</p>
-            </Reveal>
-          )}
-          {aside && <Reveal delay={200}>{aside}</Reveal>}
-        </div>
-      )}
+      <div className="lg:col-span-5">
+        {lead && (
+          <Reveal delay={130}>
+            <p className="lead">{lead}</p>
+          </Reveal>
+        )}
+        {aside && <Reveal delay={190}>{aside}</Reveal>}
+      </div>
     </div>
   );
 }
