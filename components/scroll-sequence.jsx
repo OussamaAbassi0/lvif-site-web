@@ -75,7 +75,10 @@ export default function ScrollSequence({ children, onProgress }) {
     };
 
     const boot = async () => {
-      const priority = Math.min(total, Math.ceil(total / 3));
+      /* On n'attend que les premières images avant d'afficher le canvas :
+         le scroll est utilisable presque immédiatement, le reste arrive
+         pendant que l'utilisateur lit le titre. */
+      const priority = Math.min(total, 10);
       const first = await Promise.all(
         indexes.slice(0, priority).map((frameIndex) => load(frameIndex)),
       );
@@ -87,10 +90,15 @@ export default function ScrollSequence({ children, onProgress }) {
       fit();
       setReady(true);
 
-      // Le reste sans bloquer l'affichage
-      for (let i = priority; i < total; i += 1) {
+      /* Le reste par lots de quatre : plus rapide qu'un chargement séquentiel,
+         sans saturer la file de requêtes du navigateur. */
+      for (let i = priority; i < total; i += 4) {
         if (cancelled) return;
-        frames.current[i] = await load(indexes[i]);
+        const batch = indexes.slice(i, i + 4);
+        const loaded = await Promise.all(batch.map((frameIndex) => load(frameIndex)));
+        loaded.forEach((image, k) => {
+          frames.current[i + k] = image;
+        });
       }
     };
 

@@ -2,44 +2,55 @@ import Reveal from './reveal';
 
 /**
  * Bandeau de confiance.
- * Reprend le motif du site actuel : tuiles arrondies claires, deux rangées
- * défilant en sens opposés, dégradés de fondu sur les bords.
+ * Reprend la mosaïque du site actuel : tuiles arrondies claires de tailles
+ * variables, deux rangées défilant en sens opposés, fondus sur les bords.
+ *
+ * Les marques sont composées typographiquement. Pour une parité visuelle
+ * exacte, il suffit de déposer les fichiers de logos dans public/logos/
+ * et de renseigner `logo` sur chaque entrée.
  */
 
 const ROW_A = [
-  { name: 'Airbus', w: 'w-[13rem]' },
-  { name: 'Thales', w: 'w-[10rem]' },
-  { name: 'Lefebvre Dalloz', w: 'w-[12rem]' },
-  { name: 'Vinci', w: 'w-[13rem]' },
-  { name: 'Orpi', w: 'w-[9rem]' },
-  { name: 'Ville de Besançon', w: 'w-[12rem]' },
-  { name: 'Crédit Agricole', w: 'w-[12rem]' },
-  { name: 'Borealis', w: 'w-[10rem]' },
-  { name: 'Leroy Merlin', w: 'w-[12rem]' },
-  { name: 'Saint-Gobain', w: 'w-[11rem]' },
+  { name: 'Airbus', size: 'lg' },
+  { name: 'Ville de Besançon', size: 'sm' },
+  { name: 'Orpi', size: 'sm' },
+  { name: 'Crédit Agricole', size: 'sm' },
+  { name: 'Vinci', size: 'lg' },
+  { name: 'Borealis', size: 'sm' },
+  { name: 'Leroy Merlin', size: 'sm' },
+  { name: 'Saint-Gobain', size: 'sm' },
+  { name: 'Dassault Aviation', size: 'lg' },
+  { name: 'Thales', size: 'sm' },
+  { name: 'Lefebvre Dalloz', size: 'sm' },
 ];
 
 const ROW_B = [
-  { name: 'Disney', w: 'w-[11rem]' },
-  { name: 'SNCF', w: 'w-[9rem]' },
-  { name: 'Dell', w: 'w-[9rem]' },
-  { name: 'Burger King', w: 'w-[12rem]' },
-  { name: 'Decathlon', w: 'w-[12rem]' },
-  { name: 'BoConcept', w: 'w-[11rem]' },
-  { name: 'Le Département du Var', w: 'w-[13rem]' },
-  { name: 'Total Énergies', w: 'w-[12rem]' },
-  { name: 'Autopolis', w: 'w-[11rem]' },
-  { name: 'Moose', w: 'w-[9rem]' },
-  { name: 'Mercedes-Benz', w: 'w-[12rem]' },
-  { name: 'Air Liquide', w: 'w-[11rem]' },
+  { name: 'La Foir’Fouille', size: 'sm' },
+  { name: 'Aéroport Nice Côte d’Azur', size: 'sm' },
+  { name: 'Disney', size: 'lg' },
+  { name: 'SNCF', size: 'sm' },
+  { name: 'Kopp', size: 'sm' },
+  { name: 'Lombard 07', size: 'sm' },
+  { name: 'BoConcept', size: 'sm' },
+  { name: 'Viva Technology', size: 'lg' },
+  { name: 'Decathlon', size: 'md' },
+  { name: 'Burger King', size: 'sm' },
+  { name: 'Total Énergies', size: 'sm' },
+  { name: 'Mercedes-Benz', size: 'md' },
 ];
 
-function Tile({ name, w }) {
+const SIZES = {
+  sm: 'w-[10.5rem] h-[8.5rem] text-[0.92rem]',
+  md: 'w-[13.5rem] h-[8.5rem] text-[1.05rem]',
+  lg: 'w-[17rem] h-[11.5rem] text-[1.35rem]',
+};
+
+function Tile({ name, size }) {
   return (
     <li
-      className={`${w} grid h-[6.5rem] shrink-0 place-items-center rounded-[22px] bg-tile px-6 transition-colors duration-500 hover:bg-lime-wash`}
+      className={`${SIZES[size]} grid shrink-0 place-items-center rounded-[26px] bg-tile px-6 transition-colors duration-500 hover:bg-lime-wash`}
     >
-      <span className="text-center font-[family-name:var(--font-display)] text-[0.95rem] font-bold leading-tight tracking-tight text-ink">
+      <span className="text-center font-[family-name:var(--font-display)] font-extrabold leading-tight tracking-tight text-ink">
         {name}
       </span>
     </li>
@@ -49,9 +60,11 @@ function Tile({ name, w }) {
 function Row({ items, direction }) {
   const sequence = [...items, ...items];
   return (
-    <div className="relative overflow-hidden">
+    <div className="overflow-hidden">
       <ul
-        className={`flex w-max gap-4 ${direction === 'left' ? 'row-left' : 'row-right'}`}
+        className={`flex w-max items-center gap-4 ${
+          direction === 'left' ? 'row-left' : 'row-right'
+        }`}
         aria-hidden="true"
       >
         {sequence.map((item, index) => (
@@ -69,19 +82,19 @@ export default function TrustMarquee() {
     <section className="py-20 md:py-28">
       <div className="shell">
         <Reveal>
-          <h2 className="d2 mx-auto max-w-[22ch] text-center">
+          <h2 className="d2 mx-auto max-w-[20ch] text-center">
             Plus de 200 entreprises nationales et internationales nous font confiance
           </h2>
         </Reveal>
       </div>
 
       <div
-        className="relative mt-12 space-y-4"
+        className="relative mt-14 space-y-4"
         role="img"
         aria-label={`Références clients : ${all.join(', ')}`}
       >
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-paper to-transparent md:w-32" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-paper to-transparent md:w-32" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-paper to-transparent md:w-40" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-paper to-transparent md:w-40" />
         <Row items={ROW_A} direction="left" />
         <Row items={ROW_B} direction="right" />
       </div>
