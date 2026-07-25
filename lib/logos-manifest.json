@@ -1,0 +1,74 @@
+{
+  "airbus": {
+    "src": "/logos/airbus.svg",
+    "name": "Airbus"
+  },
+  "disney": {
+    "src": "/logos/disney.svg",
+    "name": "Disney"
+  },
+  "sncf": {
+    "src": "/logos/sncf.svg",
+    "name": "SNCF"
+  },
+  "vinci": {
+    "src": "/logos/vinci.svg",
+    "name": "Vinci"
+  },
+  "borealis": {
+    "src": "/logos/borealis.svg",
+    "name": "Borealis"
+  },
+  "leroy-merlin": {
+    "src": "/logos/leroy-merlin.svg",
+    "name": "Leroy Merlin"
+  },
+  "dassault-aviation": {
+    "src": "/logos/dassault-aviation.svg",
+    "name": "Dassault Aviation"
+  },
+  "lefebvre-dalloz": {
+    "src": "/logos/lefebvre-dalloz.svg",
+    "name": "Lefebvre Dalloz"
+  },
+  "besancon": {
+    "src": "/logos/besancon.svg",
+    "name": "Ville de Besançon"
+  },
+  "viva-technology": {
+    "src": "/logos/viva-technology.svg",
+    "name": "Viva Technology"
+  },
+  "thales": {
+    "src": "/logos/thales.svg",
+    "name": "Thales"
+  },
+  "saint-gobain": {
+    "src": "/logos/saint-gobain.svg",
+    "name": "Saint-Gobain"
+  },
+  "burger-king": {
+    "src": "/logos/burger-king.svg",
+    "name": "Burger King"
+  },
+  "total-energies": {
+    "src": "/logos/total-energies.svg",
+    "name": "TotalEnergies"
+  },
+  "mercedes-benz": {
+    "src": "/logos/mercedes-benz.svg",
+    "name": "Mercedes-Benz"
+  },
+  "credit-agricole": {
+    "src": "/logos/credit-agricole.svg",
+    "name": "Crédit Agricole"
+  },
+  "boconcept": {
+    "src": "/logos/boconcept.png",
+    "name": "BoConcept"
+  },
+  "decathlon": {
+    "src": "/logos/decathlon.svg",
+    "name": "Decathlon"
+  }
+}

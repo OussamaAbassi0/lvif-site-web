@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import BrandMark from './brand-mark';
 import ArrowPill from './arrow-pill';
+import { SOCIALS } from './social-icons';
 import { company, ranges, cities } from '@/lib/content';
 
 export default function SiteFooter() {
@@ -60,22 +61,27 @@ export default function SiteFooter() {
             </dl>
 
             <p className="eyebrow mt-8 text-lime">Nous suivre</p>
-            <div className="mt-4 flex gap-5 text-sm">
+            <div className="mt-4 flex gap-3">
               {[
-                ['LinkedIn', company.linkedin],
-                ['YouTube', company.youtube],
-                ['Instagram', company.instagram],
-              ].map(([label, href]) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="sweep text-white/65 transition-colors hover:text-white"
-                >
-                  {label}
-                </a>
-              ))}
+                ['linkedin', company.linkedin],
+                ['youtube', company.youtube],
+                ['instagram', company.instagram],
+              ].map(([key, href]) => {
+                const social = SOCIALS.find((item) => item.key === key);
+                const { Icon, label } = social;
+                return (
+                  <a
+                    key={key}
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    aria-label={label}
+                    className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition-colors duration-300 hover:bg-lime hover:text-ink"
+                  >
+                    <Icon className="h-[18px] w-[18px]" />
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>

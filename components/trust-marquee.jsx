@@ -1,58 +1,80 @@
+import Image from 'next/image';
 import Reveal from './reveal';
+import logos from '@/lib/logos-manifest.json';
 
 /**
  * Bandeau de confiance.
  * Reprend la mosaïque du site actuel : tuiles arrondies claires de tailles
  * variables, deux rangées défilant en sens opposés, fondus sur les bords.
  *
- * Les marques sont composées typographiquement. Pour une parité visuelle
- * exacte, il suffit de déposer les fichiers de logos dans public/logos/
- * et de renseigner `logo` sur chaque entrée.
+ * Chaque marque affiche son logo lorsqu'il est disponible dans
+ * lib/logos-manifest.json (rempli par scripts/fetch-logos.mjs), et retombe
+ * sinon sur un traitement typographique.
  */
 
 const ROW_A = [
-  { name: 'Airbus', size: 'lg' },
-  { name: 'Ville de Besançon', size: 'sm' },
-  { name: 'Orpi', size: 'sm' },
-  { name: 'Crédit Agricole', size: 'sm' },
-  { name: 'Vinci', size: 'lg' },
-  { name: 'Borealis', size: 'sm' },
-  { name: 'Leroy Merlin', size: 'sm' },
-  { name: 'Saint-Gobain', size: 'sm' },
-  { name: 'Dassault Aviation', size: 'lg' },
-  { name: 'Thales', size: 'sm' },
-  { name: 'Lefebvre Dalloz', size: 'sm' },
+  { slug: 'airbus', name: 'Airbus', size: 'lg' },
+  { slug: 'besancon', name: 'Ville de Besançon', size: 'sm' },
+  { slug: 'orpi', name: 'Orpi', size: 'sm' },
+  { slug: 'credit-agricole', name: 'Crédit Agricole', size: 'sm' },
+  { slug: 'vinci', name: 'Vinci', size: 'lg' },
+  { slug: 'borealis', name: 'Borealis', size: 'sm' },
+  { slug: 'leroy-merlin', name: 'Leroy Merlin', size: 'sm' },
+  { slug: 'saint-gobain', name: 'Saint-Gobain', size: 'sm' },
+  { slug: 'dassault-aviation', name: 'Dassault Aviation', size: 'lg' },
+  { slug: 'thales', name: 'Thales', size: 'sm' },
+  { slug: 'lefebvre-dalloz', name: 'Lefebvre Dalloz', size: 'sm' },
 ];
 
 const ROW_B = [
-  { name: 'La Foir’Fouille', size: 'sm' },
-  { name: 'Aéroport Nice Côte d’Azur', size: 'sm' },
-  { name: 'Disney', size: 'lg' },
-  { name: 'SNCF', size: 'sm' },
-  { name: 'Kopp', size: 'sm' },
-  { name: 'Lombard 07', size: 'sm' },
-  { name: 'BoConcept', size: 'sm' },
-  { name: 'Viva Technology', size: 'lg' },
-  { name: 'Decathlon', size: 'md' },
-  { name: 'Burger King', size: 'sm' },
-  { name: 'Total Énergies', size: 'sm' },
-  { name: 'Mercedes-Benz', size: 'md' },
+  { slug: 'foir-fouille', name: 'La Foir’Fouille', size: 'sm' },
+  { slug: 'aeroport-nice', name: 'Aéroport Nice Côte d’Azur', size: 'sm' },
+  { slug: 'disney', name: 'Disney', size: 'lg' },
+  { slug: 'sncf', name: 'SNCF', size: 'sm' },
+  { slug: 'boconcept', name: 'BoConcept', size: 'sm' },
+  { slug: 'viva-technology', name: 'Viva Technology', size: 'lg' },
+  { slug: 'decathlon', name: 'Decathlon', size: 'md' },
+  { slug: 'burger-king', name: 'Burger King', size: 'sm' },
+  { slug: 'total-energies', name: 'TotalEnergies', size: 'sm' },
+  { slug: 'mercedes-benz', name: 'Mercedes-Benz', size: 'md' },
 ];
 
 const SIZES = {
-  sm: 'w-[10.5rem] h-[8.5rem] text-[0.92rem]',
-  md: 'w-[13.5rem] h-[8.5rem] text-[1.05rem]',
-  lg: 'w-[17rem] h-[11.5rem] text-[1.35rem]',
+  sm: { box: 'w-[11rem] h-[8.5rem]', logo: 'max-h-[3.2rem] max-w-[7rem]', text: 'text-[0.92rem]' },
+  md: { box: 'w-[14rem] h-[8.5rem]', logo: 'max-h-[3.4rem] max-w-[9.5rem]', text: 'text-[1.05rem]' },
+  lg: {
+    box: 'w-[17.5rem] h-[11.5rem]',
+    logo: 'max-h-[4.6rem] max-w-[12rem]',
+    text: 'text-[1.35rem]',
+  },
 };
 
-function Tile({ name, size }) {
+function Tile({ slug, name, size }) {
+  const preset = SIZES[size];
+  const logo = logos[slug];
+
   return (
     <li
-      className={`${SIZES[size]} grid shrink-0 place-items-center rounded-[26px] bg-tile px-6 transition-colors duration-500 hover:bg-lime-wash`}
+      className={`${preset.box} grid shrink-0 place-items-center rounded-[26px] bg-tile px-6 transition-colors duration-500 hover:bg-lime-wash`}
     >
-      <span className="text-center font-[family-name:var(--font-display)] font-extrabold leading-tight tracking-tight text-ink">
-        {name}
-      </span>
+      {logo ? (
+        <span className={`relative grid place-items-center ${preset.logo} w-full h-full`}>
+          <Image
+            src={logo.src}
+            alt={name}
+            width={320}
+            height={120}
+            unoptimized
+            className={`${preset.logo} h-auto w-auto object-contain opacity-80 grayscale transition-[filter,opacity] duration-500 hover:opacity-100`}
+          />
+        </span>
+      ) : (
+        <span
+          className={`text-center font-[family-name:var(--font-display)] font-extrabold leading-tight tracking-tight text-ink ${preset.text}`}
+        >
+          {name}
+        </span>
+      )}
     </li>
   );
 }
@@ -68,7 +90,7 @@ function Row({ items, direction }) {
         aria-hidden="true"
       >
         {sequence.map((item, index) => (
-          <Tile key={`${item.name}-${index}`} {...item} />
+          <Tile key={`${item.slug}-${index}`} {...item} />
         ))}
       </ul>
     </div>
