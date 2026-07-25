@@ -99,6 +99,8 @@ async function main() {
   console.log(`[frames] ${tmps.length} images extraites`);
 }
 
-main().catch((error) => {
-  console.warn('[frames] étape ignorée :', error.message);
+main().catch(async (error) => {
+  console.warn('[frames] extraction impossible :', error.message);
+  // On remet le compteur à zéro : le hero bascule alors sur son image fixe.
+  await writeFile(MANIFEST, `${JSON.stringify({ count: 0, width: WIDTH }, null, 2)}\n`, 'utf8');
 });

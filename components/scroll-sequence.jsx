@@ -138,14 +138,23 @@ export default function ScrollSequence({ children, onProgress }) {
 
   return (
     <section ref={root} className="relative" aria-label="Présentation">
-      <div ref={stage} className="relative h-[100svh] w-full overflow-hidden">
-        <canvas
-          ref={canvas}
+      <div ref={stage} className="relative h-[100svh] w-full overflow-hidden bg-ink">
+        {/* Image fixe : visible pendant le préchargement, et seul rendu si la
+            séquence n'a pas pu être générée au build. */}
+        <div
           aria-hidden="true"
-          className={`absolute inset-0 h-full w-full bg-ink transition-opacity duration-700 ${
-            ready ? 'opacity-100' : 'opacity-0'
-          }`}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(/frames/hero-b.jpg)' }}
         />
+        {count > 0 && (
+          <canvas
+            ref={canvas}
+            aria-hidden="true"
+            className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${
+              ready ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
         {children}
       </div>
     </section>
