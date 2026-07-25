@@ -3,5 +3,7 @@ node_modules
 out
 .DS_Store
 .env*
-!.env.example
-public/media/*.mp4
+
+# Séquence du hero : régénérée au build par scripts/build-frames.mjs
+public/sequence/
+public/media/
