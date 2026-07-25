@@ -9,6 +9,7 @@ import ProjectCard from '@/components/project-card';
 import FaqList from '@/components/faq-list';
 import CoverageMap from '@/components/coverage-map';
 import Reviews from '@/components/reviews';
+import Simulator from '@/components/simulator';
 import ArrowPill from '@/components/arrow-pill';
 import { keyFigures, pillars, ranges, projects, useCases } from '@/lib/content';
 
@@ -182,6 +183,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <Simulator />
 
       <TrustMarquee />
 

@@ -28,8 +28,49 @@ export function InstagramIcon(props) {
   );
 }
 
+/**
+ * Le « G » de Google se reconnaît à ses quatre couleurs : on garde donc les
+ * teintes de la marque plutôt que currentColor, sinon le repère disparaît.
+ */
+export function GoogleIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
+      <path
+        fill="#4285F4"
+        d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.63h6.46a5.52 5.52 0 0 1-2.4 3.62v3h3.88c2.27-2.09 3.58-5.17 3.58-8.8Z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 24c3.24 0 5.96-1.08 7.94-2.91l-3.88-3.01c-1.08.72-2.45 1.15-4.06 1.15-3.12 0-5.77-2.11-6.71-4.95H1.28v3.1A12 12 0 0 0 12 24Z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.29 14.28a7.2 7.2 0 0 1 0-4.56v-3.1H1.28a12 12 0 0 0 0 10.76l4.01-3.1Z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 4.75c1.76 0 3.34.61 4.59 1.8l3.43-3.43C17.95 1.19 15.23 0 12 0A12 12 0 0 0 1.28 6.62l4.01 3.1C6.23 6.88 8.88 4.75 12 4.75Z"
+      />
+    </svg>
+  );
+}
+
+/** Marque Avis Vérifiés : rosace à quatre pales. */
+export function AvisVerifiesIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M12 1.4c1.1 0 2 .9 2 2v5.2l3.7-3.7a2 2 0 1 1 2.8 2.8L16.8 11.5H22a2 2 0 1 1 0 4h-5.2l3.7 3.7a2 2 0 1 1-2.8 2.8L14 18.3v5.2a2 2 0 1 1-4 0v-5.2l-3.7 3.7a2 2 0 0 1-2.8-2.8l3.7-3.7H2a2 2 0 1 1 0-4h5.2L3.5 7.8a2 2 0 1 1 2.8-2.8L10 8.6V3.4c0-1.1.9-2 2-2Z" />
+    </svg>
+  );
+}
+
 export const SOCIALS = [
   { key: 'linkedin', label: 'LinkedIn', Icon: LinkedInIcon },
   { key: 'youtube', label: 'YouTube', Icon: YouTubeIcon },
   { key: 'instagram', label: 'Instagram', Icon: InstagramIcon },
+];
+
+export const REVIEW_SOURCES = [
+  { key: 'google', label: 'Avis Google', Icon: GoogleIcon },
+  { key: 'avis-verifies', label: 'Avis Vérifiés', Icon: AvisVerifiesIcon },
 ];

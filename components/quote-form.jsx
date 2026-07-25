@@ -42,8 +42,19 @@ export default function QuoteForm() {
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
 
-  /* Pré-remplissage depuis le chatbot de qualification */
+  /* Pré-remplissage depuis le simulateur (paramètres d'URL) puis depuis le
+     chatbot de qualification, qui est plus précis et prime donc. */
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('mode') || params.has('surface')) {
+      setValues((current) => ({
+        ...current,
+        mode: params.get('mode') || current.mode,
+        usage: params.get('usage') || current.usage,
+        surface: params.get('surface') || current.surface,
+      }));
+    }
+
     try {
       const raw = window.sessionStorage.getItem('lvif:qualification');
       if (!raw) return;

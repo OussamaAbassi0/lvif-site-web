@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import BrandMark from './brand-mark';
 import ArrowPill from './arrow-pill';
-import { SOCIALS } from './social-icons';
-import { company, ranges, cities } from '@/lib/content';
+import { SOCIALS, REVIEW_SOURCES } from './social-icons';
+import { company, ranges, cities, reviews } from '@/lib/content';
 
 export default function SiteFooter() {
   return (
@@ -83,6 +83,35 @@ export default function SiteFooter() {
                 );
               })}
             </div>
+
+            <p className="eyebrow mt-8 text-lime">Nos avis</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {reviews.sources.map((source) => {
+                const { Icon, label } = REVIEW_SOURCES.find(
+                  (item) => item.key === source.key,
+                );
+                return (
+                  <a
+                    key={source.key}
+                    href={source.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    aria-label={`${label} — ${source.score} sur 5, ${source.count} avis`}
+                    className="group flex items-center gap-3 rounded-full bg-white/10 py-2 pl-2 pr-4 transition-colors duration-300 hover:bg-lime"
+                  >
+                    <span className="grid h-7 w-7 place-items-center rounded-full bg-white text-ink">
+                      <Icon className="h-[13px] w-[13px]" />
+                    </span>
+                    <span className="text-[0.78rem] leading-none text-white/80 transition-colors duration-300 group-hover:text-ink">
+                      <span className="font-bold text-white group-hover:text-ink">
+                        {source.score}
+                      </span>
+                      /5 · {label}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -93,12 +122,25 @@ export default function SiteFooter() {
           </p>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-8 text-[0.78rem] text-white/40 md:flex-row md:items-center md:justify-between">
+        <div className="mt-10 border-t border-white/10 pt-8 text-[0.78rem] text-white/40">
           <p>
             {company.name} — {company.legal} · Capital {company.capital} · {company.rcs} · TVA{' '}
             {company.tva}
           </p>
-          <p className="text-lime/70">Prototype de refonte · usage interne · non indexé</p>
+          <div className="mt-5 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <p>© Copyright 2026 | SAS LVIF</p>
+            <p>
+              Design &amp; intégration par{' '}
+              <a
+                href="https://oussamaabassi.com"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="sweep font-semibold text-white/70 transition-colors hover:text-lime"
+              >
+                Oussamaabassi.com
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

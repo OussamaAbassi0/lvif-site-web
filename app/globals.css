@@ -362,6 +362,16 @@
     }
   }
 
+  /* Rail d'avis : défilement continu, suspendu au survol pour laisser lire. */
+  .rail-track {
+    animation: row-left 64s linear infinite;
+  }
+
+  .rail:hover .rail-track,
+  .rail:focus-within .rail-track {
+    animation-play-state: paused;
+  }
+
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
