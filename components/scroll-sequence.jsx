@@ -26,15 +26,26 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import manifest from '@/lib/sequence-manifest.json';
 
 const pad = (i) => String(i).padStart(4, '0');
-const hiSrc = (i) => `/sequence/${pad(i)}.jpg`;
-const loSrc = (i) => `/sequence/proxy/${pad(i)}.jpg`;
 
-export default function ScrollSequence({ children, onProgress }) {
+/**
+ * `name` désigne la séquence produite au build : « accueil » ou « apropos ».
+ * `poster` est l'image fixe affichée pendant le préchargement, et le seul
+ * rendu si la séquence n'a pas pu être générée.
+ */
+export default function ScrollSequence({
+  children,
+  onProgress,
+  name = 'accueil',
+  poster = '/frames/hero-b.jpg',
+}) {
   const root = useRef(null);
   const stage = useRef(null);
   const canvas = useRef(null);
   const [ready, setReady] = useState(false);
-  const count = manifest.count || 0;
+  const count = manifest[name] || 0;
+
+  const hiSrc = (i) => `/sequence/${name}/${pad(i)}.jpg`;
+  const loSrc = (i) => `/sequence/${name}/proxy/${pad(i)}.jpg`;
 
   useEffect(() => {
     if (!count) return undefined;
@@ -174,7 +185,8 @@ export default function ScrollSequence({ children, onProgress }) {
         tween.kill();
       }
     };
-  }, [count, onProgress]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count, name, onProgress]);
 
   /* Ces balises partent dans le HTML initial : le navigateur télécharge les
      premières images de la proxy pendant qu'il évalue le JavaScript, au lieu
@@ -182,7 +194,7 @@ export default function ScrollSequence({ children, onProgress }) {
      photos de la page. C'est ce qui supprime les secondes d'immobilité. */
   const preload = Array.from({ length: Math.min(count, 24) }, (unused, i) => (
     <link
-      key={i}
+      key={`${name}-${i}`}
       rel="preload"
       as="image"
       href={loSrc(i)}
@@ -199,7 +211,7 @@ export default function ScrollSequence({ children, onProgress }) {
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: 'url(/frames/hero-b.jpg)' }}
+          style={{ backgroundImage: `url(${poster})` }}
         />
         {count > 0 && (
           <canvas

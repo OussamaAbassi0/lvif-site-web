@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import PageHero from '@/components/page-hero';
+import ScrollSequence from '@/components/scroll-sequence';
+import AboutHeroOverlay from '@/components/about-hero-overlay';
 import Reveal from '@/components/reveal';
 import ArrowPill from '@/components/arrow-pill';
 import TabShowcase from '@/components/tab-showcase';
@@ -19,32 +20,16 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <>
-      <PageHero
-        eyebrow="À propos"
-        title={about.title}
-        lead={about.lead}
-        meta={[
-          { label: 'Depuis', value: '2018' },
-          { label: 'CA groupe', value: '4,5 M€' },
-          { label: 'Entrepôt', value: '11 000 m²' },
-        ]}
-      />
+      {/* Second clip du tournage : il ouvre cette page plutôt que d'allonger
+          le hero d'accueil, où le visiteur ne l'atteignait qu'après trois
+          écrans de défilement. */}
+      <ScrollSequence name="apropos" poster="/frames/hero-a.jpg">
+        <AboutHeroOverlay />
+      </ScrollSequence>
 
-      <section className="shell pb-20 md:pb-28">
+      <section className="shell pb-20 pt-20 md:pb-28 md:pt-28">
         <Reveal>
-          <div className="relative aspect-[16/7] overflow-hidden rounded-[var(--radius-xl2)] bg-tile">
-            <Image
-              src={about.hero}
-              alt={about.heroAlt}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 1200px"
-              className="object-cover"
-            />
-          </div>
-        </Reveal>
-        <Reveal delay={110}>
-          <p className="lead mt-10 max-w-[70ch]">{about.intro}</p>
+          <p className="lead max-w-[70ch]">{about.intro}</p>
         </Reveal>
       </section>
 
