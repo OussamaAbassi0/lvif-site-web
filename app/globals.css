@@ -362,6 +362,16 @@
     }
   }
 
+  /* Changement d'onglet : la nouvelle image apparaît au lieu de sauter. */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   /* Rail d'avis : défilement continu, suspendu au survol pour laisser lire. */
   .rail-track {
     animation: row-left 64s linear infinite;

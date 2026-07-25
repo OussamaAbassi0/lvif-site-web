@@ -145,9 +145,24 @@ async function run() {
     await wait(1000);
     await capture(page, `08-chatbot-${device.key}`);
 
+    // Menu déroulant ouvert (desktop uniquement : le mobile a un accordéon)
+    if (!device.mobile) {
+      await page.goto(`${BASE}/`, { waitUntil: 'networkidle0', timeout: 60000 });
+      await settle(page);
+      const tab = await page.$$('nav[aria-label="Navigation principale"] a');
+      if (tab[0]) await tab[0].hover();
+      await wait(900);
+      await capture(page, `08b-menu-deroulant-${device.key}`);
+    }
+
     // Autres pages
     for (const [slug, name] of [
       ['catalogue', '09-catalogue'],
+      ['catalogue/ecran-exterieur-led', '09b-ecran-exterieur'],
+      ['location', '09c-location'],
+      ['a-propos', '09d-a-propos'],
+      ['solutions', '09e-solutions'],
+      ['solutions/studios-tv', '09f-studios-tv'],
       ['realisations', '10-realisations'],
       ['devis', '11-devis'],
     ]) {

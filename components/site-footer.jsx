@@ -2,7 +2,8 @@ import Link from 'next/link';
 import BrandMark from './brand-mark';
 import ArrowPill from './arrow-pill';
 import { SOCIALS, REVIEW_SOURCES } from './social-icons';
-import { company, ranges, cities, reviews } from '@/lib/content';
+import { company, cities, reviews } from '@/lib/content';
+import { catalog, solutions } from '@/lib/pages';
 
 export default function SiteFooter() {
   return (
@@ -34,13 +35,35 @@ export default function SiteFooter() {
           <div className="lg:col-span-3">
             <p className="eyebrow text-lime">Nos écrans</p>
             <ul className="mt-6 space-y-3">
-              {ranges.map((range) => (
-                <li key={range.slug}>
+              {catalog.map((sheet) => (
+                <li key={sheet.slug}>
                   <Link
-                    href={`/catalogue#${range.slug}`}
+                    href={`/catalogue/${sheet.slug}`}
                     className="sweep text-sm text-white/65 transition-colors hover:text-white"
                   >
-                    {range.title}
+                    {sheet.title}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/location"
+                  className="sweep text-sm text-white/65 transition-colors hover:text-white"
+                >
+                  Location d’écran géant
+                </Link>
+              </li>
+            </ul>
+
+            <p className="eyebrow mt-8 text-lime">Solutions métiers</p>
+            <ul className="mt-6 space-y-3">
+              {solutions.map((item) => (
+                <li key={item.slug}>
+                  <Link
+                    href={`/solutions/${item.slug}`}
+                    className="sweep text-sm text-white/65 transition-colors hover:text-white"
+                  >
+                    {item.title}
                   </Link>
                 </li>
               ))}
