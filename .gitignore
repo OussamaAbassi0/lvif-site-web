@@ -7,3 +7,11 @@ out
 # Séquence du hero : régénérée au build par scripts/build-frames.mjs
 public/sequence/
 public/media/
+
+# Fonds de carte bruts, gardés en cache local ; seul lib/map-paths.json
+# (produit par scripts/build-map.mjs) est versionné.
+_geo.json
+_fr.json
+
+# Captures de contrôle produites par scripts/shots.mjs
+captures/

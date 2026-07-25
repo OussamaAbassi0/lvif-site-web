@@ -207,9 +207,14 @@ export default function CoverageMap() {
             </Reveal>
 
             <Reveal delay={120}>
-              <ul className="mt-5 flex flex-wrap gap-2" aria-label="Sélection d'une ville">
+              {/* Sur mobile la liste occupait cinq lignes : elle défile
+                  désormais horizontalement, sur une seule. */}
+              <ul
+                className="no-scrollbar mt-5 flex gap-2 overflow-x-auto sm:flex-wrap sm:overflow-visible"
+                aria-label="Sélection d'une ville"
+              >
                 {SITES.map((site) => (
-                  <li key={site.name}>
+                  <li key={site.name} className="shrink-0">
                     <button
                       type="button"
                       onClick={() => setActive(site.name)}
