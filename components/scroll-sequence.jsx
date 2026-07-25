@@ -176,8 +176,23 @@ export default function ScrollSequence({ children, onProgress }) {
     };
   }, [count, onProgress]);
 
+  /* Ces balises partent dans le HTML initial : le navigateur télécharge les
+     premières images de la proxy pendant qu'il évalue le JavaScript, au lieu
+     d'attendre l'hydratation puis de faire la queue derrière les logos et les
+     photos de la page. C'est ce qui supprime les secondes d'immobilité. */
+  const preload = Array.from({ length: Math.min(count, 24) }, (unused, i) => (
+    <link
+      key={i}
+      rel="preload"
+      as="image"
+      href={loSrc(i)}
+      fetchPriority={i < 4 ? 'high' : 'low'}
+    />
+  ));
+
   return (
     <section ref={root} className="relative" aria-label="Présentation">
+      {preload}
       <div ref={stage} className="relative h-[100svh] w-full overflow-hidden bg-ink">
         {/* Image fixe : visible pendant le préchargement, et seul rendu si la
             séquence n'a pas pu être générée au build. */}

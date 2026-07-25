@@ -66,6 +66,10 @@ function Tile({ slug, name, size }) {
             height={120}
             unoptimized
             loading="eager"
+            /* Chargés d'emblée — le défilé les fait tous apparaître — mais en
+               priorité basse : ils ne doivent pas passer devant la séquence
+               du hero dans la file du navigateur. */
+            fetchPriority="low"
             className={`${preset.logo} h-auto w-auto object-contain opacity-80 grayscale transition-[filter,opacity] duration-500 hover:opacity-100`}
           />
         </span>
