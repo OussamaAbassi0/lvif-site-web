@@ -12,7 +12,7 @@
  * actuel : c'est le signe le plus reconnaissable de la marque.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Reveal from './reveal';
 import ArrowPill from './arrow-pill';
 import ChameleonMark from './chameleon-mark';
@@ -65,9 +65,9 @@ const project = ({ lat, lon }) => ({
 const PIN =
   'M0,0 C-7.4,-11.2 -17,-17.8 -17,-28.4 A17,17 0 1 1 17,-28.4 C17,-17.8 7.4,-11.2 0,0 Z';
 
-function Pin({ site, active, onSelect }) {
+function Pin({ site, active, onSelect, zoom = 1 }) {
   const { x, y } = project(site);
-  const scale = site.hub ? 1 : 0.62;
+  const scale = (site.hub ? 1 : 0.62) * zoom;
 
   return (
     <g
@@ -122,19 +122,41 @@ function Pin({ site, active, onSelect }) {
 
 export default function CoverageMap() {
   const [active, setActive] = useState('Paris');
+  const [zoom, setZoom] = useState(1);
   const current = SITES.find((site) => site.name === active) || SITES[0];
   const hubs = SITES.filter((site) => site.hub);
+
+  /* Sur un écran de 390 px, la carte fait la moitié de sa taille de bureau :
+     les marqueurs deviendraient illisibles. On les agrandit dans le repère
+     du SVG — au-delà de 1,5 ils se chevauchent autour de Paris. La liste de
+     villes en dessous reste de toute façon la commande la plus sûre au doigt. */
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 640px)');
+    const apply = () => setZoom(media.matches ? 1.45 : 1);
+    apply();
+    media.addEventListener('change', apply);
+    return () => media.removeEventListener('change', apply);
+  }, []);
 
   return (
     <section className="shell py-20 md:py-28">
       <div className="overflow-hidden rounded-[var(--radius-xl2)] bg-ink text-white">
         <div className="grid gap-10 p-6 md:p-10 lg:grid-cols-12 lg:items-center lg:gap-14 lg:p-14">
-          <div className="lg:col-span-6">
+          {/* `min-w-0` : sans lui, la liste de villes à défilement horizontal
+              impose sa largeur totale à la colonne — la carte et le texte
+              débordaient alors du cadre sur mobile. */}
+          <div className="min-w-0 lg:col-span-6">
             <Reveal>
               <div className="relative overflow-hidden rounded-[26px] bg-[#111110]">
                 <svg
                   viewBox={`0 0 ${W} ${H}`}
-                  className="h-auto w-full"
+                  /* Safari ne déduit pas toujours la hauteur d'un SVG en
+                     `height: auto` à partir de son viewBox : sur iPhone la
+                     carte se retrouvait agrandie et rognée. On impose donc
+                     le rapport hauteur/largeur, et le cadrage explicitement. */
+                  className="block w-full"
+                  style={{ aspectRatio: `${W} / ${H}` }}
+                  preserveAspectRatio="xMidYMid meet"
                   role="img"
                   aria-label={`Carte des zones d'intervention : ${SITES.map((s) => s.name).join(', ')}`}
                 >
@@ -185,6 +207,7 @@ export default function CoverageMap() {
                     <Pin
                       key={site.name}
                       site={site}
+                      zoom={zoom}
                       active={site.name === active}
                       onSelect={setActive}
                     />
@@ -193,6 +216,7 @@ export default function CoverageMap() {
                     <Pin
                       key={site.name}
                       site={site}
+                      zoom={zoom}
                       active={site.name === active}
                       onSelect={setActive}
                     />
@@ -233,7 +257,7 @@ export default function CoverageMap() {
             </Reveal>
           </div>
 
-          <div className="lg:col-span-6">
+          <div className="min-w-0 lg:col-span-6">
             <Reveal>
               <p className="eyebrow text-lime">Implantation</p>
             </Reveal>

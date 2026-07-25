@@ -70,7 +70,9 @@ export default function TabShowcase({ items, media = true, eyebrow, title, lead 
           onKeyDown={onKeyDown}
           /* Sur mobile la colonne d'onglets devient un rail horizontal :
              cinq lignes de boutons repoussaient le contenu hors de l'écran. */
-          className="no-scrollbar flex gap-2 overflow-x-auto lg:col-span-3 lg:flex-col lg:overflow-visible"
+          /* `min-w-0` : sans lui, le rail d'onglets impose sa largeur totale
+             à la colonne de la grille, et la section déborde sur mobile. */
+          className="no-scrollbar flex min-w-0 gap-2 overflow-x-auto lg:col-span-3 lg:flex-col lg:overflow-visible"
         >
           {items.map((item, index) => (
             <button
@@ -98,7 +100,7 @@ export default function TabShowcase({ items, media = true, eyebrow, title, lead 
           role="tabpanel"
           id={`${id}-panel-${active}`}
           aria-labelledby={`${id}-tab-${active}`}
-          className="lg:col-span-9"
+          className="min-w-0 lg:col-span-9"
         >
           <div className="grid gap-4 md:grid-cols-2">
             {media && current.image && (

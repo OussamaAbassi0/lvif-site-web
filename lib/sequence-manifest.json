@@ -1,6 +1,4 @@
 {
-  "accueil": 64,
-  "apropos": 64,
-  "width": 1120,
-  "proxyWidth": 360
+  "count": 128,
+  "width": 1120
 }
