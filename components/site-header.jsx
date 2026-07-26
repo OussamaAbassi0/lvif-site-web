@@ -198,8 +198,13 @@ export default function SiteHeader() {
               <BrandMark width={78} />
             </Link>
 
+            {/* L'arrivée du Blog a porté la barre à six entrées : les libellés
+                les plus longs passaient à la ligne. Le texte est resserré et
+                le retour à la ligne interdit — une entrée de menu sur deux
+                lignes fait amateur. La taille remonte à partir de 1280 px,
+                où la place ne manque plus. */}
             <nav
-              className="relative hidden items-center gap-1 rounded-full bg-white px-3 py-2 shadow-[0_10px_30px_rgba(13,13,13,0.08)] lg:flex"
+              className="relative hidden min-w-0 items-center gap-0.5 rounded-full bg-white px-2.5 py-2 shadow-[0_10px_30px_rgba(13,13,13,0.08)] lg:flex xl:gap-1 xl:px-3"
               aria-label="Navigation principale"
             >
               {navigation.map((item) => (
@@ -212,7 +217,7 @@ export default function SiteHeader() {
                     aria-current={active(item.href) ? 'page' : undefined}
                     aria-expanded={item.columns ? menu === item.label : undefined}
                     onFocus={() => item.columns && hoverOpen(item.label)}
-                    className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-[0.92rem] font-semibold transition-colors ${
+                    className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-2.5 text-[0.8rem] font-semibold transition-colors xl:gap-2 xl:px-4 xl:text-[0.88rem] ${
                       active(item.href) ? 'bg-ink text-paper' : 'text-ink hover:bg-tile'
                     }`}
                   >
