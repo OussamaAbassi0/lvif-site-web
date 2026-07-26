@@ -63,12 +63,16 @@ export default function QuoteSummary() {
     );
   }, [config.surface, config.high]);
 
+  /* Virgule décimale : un document destiné à circuler chez le client ne peut
+     pas afficher « 3.5 m ». */
+  const fr = (value) => String(value).replace('.', ',');
+
   const rows = [
     ['Nature', config.mode === 'achat' ? 'Achat — installation fixe' : 'Location — événementiel'],
     ['Implantation', config.usage],
-    ['Dimensions', `${config.width} m × ${config.height} m`],
-    ['Surface', `${config.surface.toFixed(1).replace('.', ',')} m²`],
-    ['Finesse de dalle', `${config.pitch} — pas de ${config.pitch.replace('P', '')} mm`],
+    ['Dimensions', `${fr(config.width)} m × ${fr(config.height)} m`],
+    ['Surface', `${fr(config.surface.toFixed(1))} m²`],
+    ['Finesse de dalle', `${config.pitch} — pas de ${fr(config.pitch.replace('P', ''))} mm`],
     ['Définition', config.pixels ? `${config.pixels.replace('x', ' × ')} pixels` : '—'],
     ...(config.mode === 'location' && config.days
       ? [['Durée de location', `${config.days} ${config.days > 1 ? 'jours' : 'jour'}`]]

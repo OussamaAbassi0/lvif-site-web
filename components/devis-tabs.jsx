@@ -21,8 +21,17 @@ const TABS = [
 export default function DevisTabs() {
   const [tab, setTab] = useState('projet');
 
+  /* `includes` plutôt qu'une égalité stricte : une ancre peut arriver suivie
+     de paramètres. Et l'écoute de `hashchange` est nécessaire — un lien vers
+     #rendez-vous cliqué depuis la page elle-même ne remonte pas le composant,
+     l'onglet resterait alors sur le formulaire. */
   useEffect(() => {
-    if (window.location.hash === '#rendez-vous') setTab('rendez-vous');
+    const sync = () => {
+      if (window.location.hash.includes('rendez-vous')) setTab('rendez-vous');
+    };
+    sync();
+    window.addEventListener('hashchange', sync);
+    return () => window.removeEventListener('hashchange', sync);
   }, []);
 
   return (
