@@ -81,6 +81,30 @@ async function writeManifest(counts) {
   );
 }
 
+/**
+ * Poster WebP tiré de la première image de la séquence.
+ *
+ * C'est le tout premier pixel que voit le visiteur, avant même que le
+ * JavaScript s'exécute : il doit peser le moins possible. En WebP à 1280 px
+ * on tombe autour de 40 ko, contre 180 ko pour le JPEG équivalent.
+ */
+async function poster(bin, clip) {
+  const source = path.join(OUT, clip.name, '0000.jpg');
+  if (!existsSync(source)) return;
+  const target = path.join(OUT, clip.name, 'poster.webp');
+  await run(bin, [
+    '-y',
+    '-i',
+    source,
+    '-vf',
+    'scale=1280:-2:flags=lanczos',
+    '-quality',
+    '62',
+    target,
+  ]);
+  console.log(`[frames] ${clip.name} : poster.webp`);
+}
+
 /** Extrait un clip en deux résolutions ; renvoie le nombre d'images. */
 async function extract(bin, clip) {
   const dir = path.join(OUT, clip.name);
@@ -138,6 +162,7 @@ async function main() {
 
   for (const clip of CLIPS) {
     counts[clip.name] = await extract(bin, clip);
+    await poster(bin, clip);
   }
 
   await writeManifest(counts);

@@ -23,7 +23,7 @@ export default function AboutPage() {
       {/* Second clip du tournage : il ouvre cette page plutôt que d'allonger
           le hero d'accueil, où le visiteur ne l'atteignait qu'après trois
           écrans de défilement. */}
-      <ScrollSequence name="apropos" poster="/frames/hero-a.jpg">
+      <ScrollSequence name="apropos">
         <AboutHeroOverlay />
       </ScrollSequence>
 
