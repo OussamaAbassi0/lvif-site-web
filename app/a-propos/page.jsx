@@ -8,7 +8,9 @@ import TrustMarquee from '@/components/trust-marquee';
 import Reviews from '@/components/reviews';
 import CoverageMap from '@/components/coverage-map';
 import Counter from '@/components/counter';
+import VideoPlayer from '@/components/video-player';
 import { about } from '@/lib/pages';
+import { videos } from '@/lib/videos';
 import { keyFigures } from '@/lib/content';
 
 export const metadata = {
@@ -101,6 +103,41 @@ export default function AboutPage() {
               <p className="mt-2 text-[0.85rem] leading-relaxed text-muted">{figure.note}</p>
             </Reveal>
           ))}
+        </div>
+      </section>
+
+      {/* — La technologie, expliquée ————————————————————— */}
+      <section className="shell pb-20 md:pb-28">
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-14">
+          <div className="min-w-0 lg:col-span-7">
+            <VideoPlayer
+              src={videos.atelier.src}
+              title={videos.atelier.title}
+              mode={videos.atelier.mode}
+              ratio={videos.atelier.ratio}
+            />
+          </div>
+          <div className="min-w-0 lg:col-span-5">
+            <Reveal>
+              <p className="eyebrow">Composants</p>
+            </Reveal>
+            <Reveal delay={70}>
+              <h2 className="d2 mt-4 max-w-[14ch]">Ce qui distingue une dalle d’une autre</h2>
+            </Reveal>
+            <Reveal delay={130}>
+              <p className="mt-6 leading-relaxed text-body">
+                Ampoules LED, boîtiers d’alimentation, cartes de réception, connecteurs, câblage :
+                chaque composant décide de la fiabilité de l’écran. Cette vidéo montre la
+                différence entre une technologie COB et une mini-LED, à l’œil nu.
+              </p>
+            </Reveal>
+            <Reveal delay={190}>
+              <p className="mt-5 leading-relaxed text-body">
+                C’est aussi la raison pour laquelle les modules de rechange sont commandés dès la
+                production de votre écran, dans le même bain : sans quoi un remplacement se voit.
+              </p>
+            </Reveal>
+          </div>
         </div>
       </section>
 

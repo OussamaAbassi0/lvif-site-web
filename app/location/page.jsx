@@ -6,8 +6,20 @@ import TabShowcase from '@/components/tab-showcase';
 import TrustMarquee from '@/components/trust-marquee';
 import Reviews from '@/components/reviews';
 import Simulator from '@/components/simulator';
+import VideoPlayer from '@/components/video-player';
+import SectionHead from '@/components/section-head';
 import { rental } from '@/lib/pages';
 import { cities } from '@/lib/content';
+import { videos } from '@/lib/videos';
+
+/* Les quatre plans de location du site actuel, réunis en une grille plutôt
+   que dispersés dans la page. */
+const RENTAL_CLIPS = [
+  'location-stand',
+  'location-exterieur',
+  'location-remorque',
+  'location-24h-mans',
+];
 
 export const metadata = {
   title: 'Location d’écran géant',
@@ -74,6 +86,31 @@ export default function RentalPage() {
               <p className="mt-4 text-[0.92rem] leading-relaxed text-muted">{step.body}</p>
             </Reveal>
           ))}
+        </div>
+      </section>
+
+      {/* — Nos montages en vidéo ————————————————————————— */}
+      <section className="shell py-20 md:py-28">
+        <SectionHead
+          eyebrow="Sur le terrain"
+          title="Quatre montages filmés"
+          lead="Stand de salon, écran extérieur, remorque, circuit. Les plans viennent de nos équipes pendant les installations."
+        />
+        <div className="mt-14 grid gap-8 md:grid-cols-2">
+          {RENTAL_CLIPS.map((key) => {
+            const clip = videos[key];
+            return (
+              <VideoPlayer
+                key={key}
+                src={clip.src}
+                poster={clip.poster}
+                title={clip.title}
+                caption={clip.caption}
+                mode={clip.mode}
+                ratio={clip.ratio}
+              />
+            );
+          })}
         </div>
       </section>
 

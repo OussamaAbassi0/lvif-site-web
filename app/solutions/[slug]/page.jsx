@@ -6,7 +6,9 @@ import Reveal from '@/components/reveal';
 import ArrowPill from '@/components/arrow-pill';
 import Reviews from '@/components/reviews';
 import TrustMarquee from '@/components/trust-marquee';
+import VideoPlayer from '@/components/video-player';
 import { solutions } from '@/lib/pages';
+import { videos } from '@/lib/videos';
 
 export function generateStaticParams() {
   return solutions.map((item) => ({ slug: item.slug }));
@@ -25,6 +27,7 @@ export default async function SolutionPage({ params }) {
   if (!item) notFound();
 
   const others = solutions.filter((entry) => entry.slug !== slug);
+  const video = videos[slug];
 
   return (
     <>
@@ -78,6 +81,20 @@ export default async function SolutionPage({ params }) {
           </div>
         </div>
       </section>
+
+      {/* Le plan tourné sur ce type d'installation, quand il existe. */}
+      {video && (
+        <section className="shell pb-20 md:pb-28">
+          <VideoPlayer
+            src={video.src}
+            poster={video.poster}
+            title={video.title}
+            caption={video.caption}
+            mode={video.mode}
+            ratio={video.ratio}
+          />
+        </section>
+      )}
 
       <TrustMarquee />
 

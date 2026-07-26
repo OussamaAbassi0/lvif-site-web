@@ -12,6 +12,7 @@ import Reviews from '@/components/reviews';
 import Simulator from '@/components/simulator';
 import TabShowcase from '@/components/tab-showcase';
 import LatestArticles from '@/components/latest-articles';
+import VideoShowcase from '@/components/video-showcase';
 import { fixedInstall } from '@/lib/pages';
 import ArrowPill from '@/components/arrow-pill';
 import { keyFigures, pillars, ranges, projects, useCases } from '@/lib/content';
@@ -222,6 +223,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <VideoShowcase />
 
       <Reviews />
 

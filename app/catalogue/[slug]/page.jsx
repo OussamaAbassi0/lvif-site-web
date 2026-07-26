@@ -9,7 +9,9 @@ import TrustMarquee from '@/components/trust-marquee';
 import Reviews from '@/components/reviews';
 import Simulator from '@/components/simulator';
 import Accordion from '@/components/accordion';
+import VideoPlayer from '@/components/video-player';
 import { catalog } from '@/lib/pages';
+import { videos } from '@/lib/videos';
 
 export function generateStaticParams() {
   return catalog.map((sheet) => ({ slug: sheet.slug }));
@@ -28,6 +30,7 @@ export default async function RangePage({ params }) {
   if (!sheet) notFound();
 
   const others = catalog.filter((item) => item.slug !== slug);
+  const video = videos[slug];
 
   return (
     <>
@@ -107,6 +110,39 @@ export default async function RangePage({ params }) {
           </div>
         </div>
       </section>
+
+      {/* — La vidéo du chantier ————————————————————————
+          Reprise du traitement du site actuel : les deux chiffres posés en
+          débord sur l'angle inférieur gauche de l'image. */}
+      {video && (
+        <section className="shell pb-20 md:pb-28">
+          <div className="relative">
+            <VideoPlayer
+              src={video.src}
+              poster={video.poster}
+              title={video.title}
+              mode={video.mode}
+              ratio={video.ratio}
+            />
+
+            <div className="pointer-events-none absolute bottom-16 left-4 flex flex-wrap gap-3 pr-4 md:bottom-20 md:left-8">
+              <div className="max-w-[15rem] rounded-[22px] bg-white p-5 shadow-[0_18px_40px_rgba(13,13,13,0.22)] md:p-6">
+                <p className="font-[family-name:var(--font-display)] text-[1.05rem] font-extrabold leading-tight tracking-tight text-ink">
+                  +1 400 installations réalisées depuis 2018
+                </p>
+                <p className="mt-2 text-[0.78rem] leading-snug text-muted">
+                  Écrans géants intérieurs, extérieurs, écrans tactiles…
+                </p>
+              </div>
+              <div className="max-w-[13rem] rounded-[22px] bg-white p-5 shadow-[0_18px_40px_rgba(13,13,13,0.22)] md:p-6">
+                <p className="font-[family-name:var(--font-display)] text-[1.05rem] font-extrabold leading-tight tracking-tight text-ink">
+                  +2 160 m² d’écrans fixes installés en 2025
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <TrustMarquee />
 
