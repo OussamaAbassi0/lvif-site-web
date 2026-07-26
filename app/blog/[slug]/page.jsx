@@ -4,9 +4,10 @@ import { notFound } from 'next/navigation';
 import Reveal from '@/components/reveal';
 import ArrowPill from '@/components/arrow-pill';
 import ArticleCard from '@/components/article-card';
-import { getPost, getPosts, REVALIDATE } from '@/lib/wordpress';
+import { getPost, getPosts } from '@/lib/wordpress';
 
-export const revalidate = REVALIDATE;
+/* Littéral obligatoire : Next lit cette valeur statiquement. */
+export const revalidate = 900;
 /* Un article publié après le déploiement est rendu à la première visite
    plutôt que d'être introuvable. */
 export const dynamicParams = true;

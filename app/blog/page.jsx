@@ -2,11 +2,13 @@ import PageHero from '@/components/page-hero';
 import ArticleCard from '@/components/article-card';
 import Reveal from '@/components/reveal';
 import ArrowPill from '@/components/arrow-pill';
-import { getPosts, REVALIDATE } from '@/lib/wordpress';
+import { getPosts } from '@/lib/wordpress';
 
 /* Régénération périodique : le client publie dans WordPress, la page se
-   refait sans intervention ni redéploiement. */
-export const revalidate = REVALIDATE;
+   refait sans intervention ni redéploiement.
+   Next analyse cette valeur statiquement au build : elle doit rester un
+   littéral, une constante importée est rejetée. */
+export const revalidate = 900;
 
 export const metadata = {
   title: 'Blog et ressources',

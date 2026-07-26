@@ -6,9 +6,9 @@ import CoverageMap from '@/components/coverage-map';
 import ArrowPill from '@/components/arrow-pill';
 import LiveRealisations from '@/components/live-realisations';
 import { projects } from '@/lib/content';
-import { REVALIDATE } from '@/lib/wordpress';
 
-export const revalidate = REVALIDATE;
+/* Littéral obligatoire : Next lit cette valeur statiquement. */
+export const revalidate = 900;
 
 export const metadata = {
   title: 'Réalisations',

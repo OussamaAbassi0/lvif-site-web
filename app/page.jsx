@@ -15,9 +15,9 @@ import LatestArticles from '@/components/latest-articles';
 import { fixedInstall } from '@/lib/pages';
 import ArrowPill from '@/components/arrow-pill';
 import { keyFigures, pillars, ranges, projects, useCases } from '@/lib/content';
-import { REVALIDATE } from '@/lib/wordpress';
 
-export const revalidate = REVALIDATE;
+/* Littéral obligatoire : Next lit cette valeur statiquement. */
+export const revalidate = 900;
 
 export default function HomePage() {
   const featured = projects.slice(0, 6);
