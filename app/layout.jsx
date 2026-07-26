@@ -43,7 +43,10 @@ export default function RootLayout({ children }) {
         <SiteHeader />
         <main id="contenu">{children}</main>
         <SiteFooter />
-        <QualifChat />
+        {/* Exclu de l'impression : le récapitulatif de devis doit sortir seul. */}
+        <div data-print-hide>
+          <QualifChat />
+        </div>
       </body>
     </html>
   );

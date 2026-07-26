@@ -135,6 +135,24 @@ export default function SiteFooter() {
                 );
               })}
             </div>
+
+            {/* Bloc SAV, comme sur le site actuel — mais il mène à un
+                pré-diagnostic plutôt qu'à un formulaire de plus. */}
+            <Link
+              href="/sav"
+              className="group mt-8 block rounded-[22px] bg-white p-6 transition-transform duration-300 hover:-translate-y-0.5"
+            >
+              <p className="font-[family-name:var(--font-display)] text-[1.05rem] font-extrabold tracking-tight text-ink">
+                SAV LED Visual Innovation
+              </p>
+              <p className="mt-3 text-[0.85rem] leading-relaxed text-muted">
+                Un dysfonctionnement ou une panne à signaler ? Obtenez un premier diagnostic
+                immédiat et le délai d’intervention qui s’applique.
+              </p>
+              <span className="sweep mt-4 inline-block text-[0.82rem] font-bold text-ink">
+                Contacter le support
+              </span>
+            </Link>
           </div>
         </div>
 

@@ -107,6 +107,9 @@ export default function Simulator() {
   const [height, setHeight] = useState(3.5);
   const [pitchKey, setPitchKey] = useState('p4');
   const [days, setDays] = useState(2);
+  /* Recettes publicitaires ou budget de communication remplacé, par mois.
+     C'est la variable qui fait passer l'écran de dépense à investissement. */
+  const [monthly, setMonthly] = useState(900);
 
   const pitch = PITCHES.find((item) => item.key === pitchKey);
 
@@ -133,10 +136,31 @@ export default function Simulator() {
     };
   }, [mode, width, height, pitch, days]);
 
+  /* Amortissement : on prend le haut de la fourchette, seul chiffre qu'un
+     acheteur peut opposer au commercial sans se sentir floué. La garantie
+     couvrant 5 ans, on borne le gain net sur cette durée. */
+  const payback = useMemo(() => {
+    if (mode !== 'achat' || monthly <= 0) return null;
+    const months = Math.ceil(result.high / monthly);
+    return {
+      months,
+      net: monthly * 60 - result.high,
+      covered: months <= 60,
+    };
+  }, [mode, monthly, result.high]);
+
   const query = new URLSearchParams({
     mode,
     usage: pitch.usage,
+    pitch: pitch.label,
+    largeur: width.toString(),
+    hauteur: height.toString(),
     surface: result.surface.toFixed(1),
+    bas: Math.round(result.low).toString(),
+    haut: Math.round(result.high).toString(),
+    px: `${result.px}x${result.py}`,
+    ...(mode === 'location' ? { jours: days.toString() } : {}),
+    ...(payback ? { mensuel: monthly.toString(), amortissement: payback.months.toString() } : {}),
   }).toString();
 
   return (
@@ -236,6 +260,74 @@ export default function Simulator() {
               <p className="mt-4 text-[0.85rem] leading-relaxed text-muted">{pitch.hint}</p>
             </div>
           </Reveal>
+
+          {/* — Amortissement ————————————————————————————
+              Un écran à 25 000 € est une dépense ; le même écran « rentabilisé
+              en 14 mois » est un investissement. C'est la même somme, mais pas
+              la même décision. */}
+          {mode === 'achat' && (
+            <Reveal delay={250}>
+              <div className="mt-4 rounded-[26px] bg-tile p-7 md:p-9">
+                <p className="text-sm font-semibold text-ink">Et si on regardait le retour ?</p>
+                <p className="mt-3 text-[0.88rem] leading-relaxed text-muted">
+                  Recettes publicitaires attendues, ou budget d’affichage que l’écran remplace :
+                  impression, adhésifs, bâches, réimpressions saisonnières.
+                </p>
+
+                <div className="mt-7">
+                  <div className="flex items-baseline justify-between">
+                    <label htmlFor="sim-monthly" className="text-sm font-semibold text-ink">
+                      Recettes ou économies mensuelles
+                    </label>
+                    <span className="font-[family-name:var(--font-display)] text-[1.05rem] font-extrabold tracking-tight text-ink">
+                      {euro(monthly)}
+                    </span>
+                  </div>
+                  <input
+                    id="sim-monthly"
+                    type="range"
+                    min={0}
+                    max={6000}
+                    step={50}
+                    value={monthly}
+                    onChange={(event) => setMonthly(Number(event.target.value))}
+                    className="mt-3 w-full accent-[var(--color-ink)]"
+                  />
+                </div>
+
+                {payback && (
+                  <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl bg-white p-6">
+                      <p className="text-[0.7rem] uppercase tracking-[0.12em] text-muted">
+                        Amortissement
+                      </p>
+                      <p className="stat mt-3 text-[2rem] text-ink">
+                        {payback.months}
+                        <span className="ml-2 text-[1rem]">mois</span>
+                      </p>
+                      <p className="mt-3 text-[0.8rem] leading-relaxed text-muted">
+                        {payback.covered
+                          ? 'Atteint pendant la période de garantie de 5 ans.'
+                          : 'Au-delà de la garantie de 5 ans : le modèle mérite d’être revu avec un technicien.'}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl bg-ink p-6 text-white">
+                      <p className="text-[0.7rem] uppercase tracking-[0.12em] text-white/45">
+                        Gain net sur 5 ans
+                      </p>
+                      <p className="stat mt-3 text-[2rem] text-lime">
+                        {payback.net > 0 ? euro(payback.net) : euro(0)}
+                      </p>
+                      <p className="mt-3 text-[0.8rem] leading-relaxed text-white/50">
+                        Après déduction du haut de la fourchette d’achat. Hors énergie et
+                        maintenance.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          )}
         </div>
 
         <div className="lg:col-span-5">
@@ -286,15 +378,29 @@ export default function Simulator() {
                 </dl>
               </div>
 
-              <Link
-                href={`/devis?${query}`}
-                className="mt-auto flex items-center justify-between gap-4 rounded-full bg-lime px-6 py-4 text-[0.92rem] font-bold text-ink transition-transform duration-300 hover:-translate-y-0.5"
-              >
-                Recevoir un chiffrage précis
-                <span aria-hidden="true" className="text-[1.1rem]">
-                  ↗
-                </span>
-              </Link>
+              {/* Deux sorties : le devis récapitulatif part en interne chez le
+                  client, souvent jusqu'au décideur qu'on n'aurait pas eu au
+                  téléphone. C'est lui qui fait avancer le dossier. */}
+              <div className="mt-auto space-y-3 pt-8">
+                <Link
+                  href={`/devis/recapitulatif?${query}`}
+                  className="flex items-center justify-between gap-4 rounded-full bg-lime px-6 py-4 text-[0.92rem] font-bold text-ink transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  Éditer mon récapitulatif
+                  <span aria-hidden="true" className="text-[1.1rem]">
+                    ↗
+                  </span>
+                </Link>
+                <Link
+                  href={`/devis?${query}`}
+                  className="flex items-center justify-between gap-4 rounded-full bg-white/10 px-6 py-4 text-[0.92rem] font-bold text-white transition-colors duration-300 hover:bg-white/20"
+                >
+                  Parler à un technicien
+                  <span aria-hidden="true" className="text-[1.1rem]">
+                    ↗
+                  </span>
+                </Link>
+              </div>
             </div>
           </Reveal>
         </div>
