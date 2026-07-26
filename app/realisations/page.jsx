@@ -4,7 +4,11 @@ import ProjectFilter from '@/components/project-filter';
 import TrustMarquee from '@/components/trust-marquee';
 import CoverageMap from '@/components/coverage-map';
 import ArrowPill from '@/components/arrow-pill';
+import LiveRealisations from '@/components/live-realisations';
 import { projects } from '@/lib/content';
+import { REVALIDATE } from '@/lib/wordpress';
+
+export const revalidate = REVALIDATE;
 
 export const metadata = {
   title: 'Réalisations',
@@ -25,6 +29,9 @@ export default function RealisationsPage() {
           { label: 'Clients', value: '+200' },
         ]}
       />
+
+      {/* Flux WordPress d'abord : c'est le contenu le plus frais. */}
+      <LiveRealisations limit={6} />
 
       <section className="shell pb-20 md:pb-28">
         <ProjectFilter projects={projects} />

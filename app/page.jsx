@@ -11,9 +11,13 @@ import CoverageMap from '@/components/coverage-map';
 import Reviews from '@/components/reviews';
 import Simulator from '@/components/simulator';
 import TabShowcase from '@/components/tab-showcase';
+import LatestArticles from '@/components/latest-articles';
 import { fixedInstall } from '@/lib/pages';
 import ArrowPill from '@/components/arrow-pill';
 import { keyFigures, pillars, ranges, projects, useCases } from '@/lib/content';
+import { REVALIDATE } from '@/lib/wordpress';
+
+export const revalidate = REVALIDATE;
 
 export default function HomePage() {
   const featured = projects.slice(0, 6);
@@ -220,6 +224,8 @@ export default function HomePage() {
       </section>
 
       <Reviews />
+
+      <LatestArticles />
 
       <CoverageMap />
 

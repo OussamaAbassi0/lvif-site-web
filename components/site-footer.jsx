@@ -55,6 +55,25 @@ export default function SiteFooter() {
               </li>
             </ul>
 
+            <p className="eyebrow mt-8 text-lime">Ressources</p>
+            <ul className="mt-6 space-y-3">
+              {[
+                ['Blog et ressources', '/blog'],
+                ['Réalisations clients', '/realisations'],
+                ['Qui sommes-nous ?', '/a-propos'],
+                ['SAV et support', '/sav'],
+              ].map(([label, href]) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="sweep text-sm text-white/65 transition-colors hover:text-white"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
             <p className="eyebrow mt-8 text-lime">Solutions métiers</p>
             <ul className="mt-6 space-y-3">
               {solutions.map((item) => (
