@@ -37,30 +37,52 @@ export default function VideoPlayer({
   const [armed, setArmed] = useState(false);
   const [playing, setPlaying] = useState(false);
 
-  /* Mode ambiance : on arme à l'approche, jamais avant. */
+  /* Mode ambiance : on arme à l'approche, jamais avant.
+     Deux détecteurs plutôt qu'un. L'observateur d'intersection couvre le cas
+     normal ; la mesure directe au défilement rattrape les situations où il
+     ne se déclenche pas — élément déjà visible au montage, redimensionnement,
+     restauration de position au retour arrière. Un plan qui ne démarre jamais
+     est un rectangle figé au milieu de la page. */
   useEffect(() => {
     if (mode !== 'ambiance' || armed) return undefined;
 
     const node = holder.current;
     if (!node) return undefined;
 
-    /* Sur connexion mesurée ou en économie de données, on s'abstient : le
-       visiteur garde l'affiche et peut lancer la lecture lui-même. */
+    /* Connexion mesurée ou économie de données : on s'abstient. Le visiteur
+       garde l'affiche et reste libre de lancer la lecture. */
     const link = navigator.connection;
-    if (link?.saveData || /2g/.test(link?.effectiveType || '')) return undefined;
+    if (link?.saveData || /(^|-)2g$/.test(link?.effectiveType || '')) return undefined;
+
+    let done = false;
+    const arm = () => {
+      if (done) return;
+      done = true;
+      setArmed(true);
+    };
+
+    const near = () => {
+      const box = node.getBoundingClientRect();
+      if (box.top < window.innerHeight + 200 && box.bottom > -200) arm();
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setArmed(true);
-          observer.disconnect();
-        }
+        if (entries.some((entry) => entry.isIntersecting)) arm();
       },
       { rootMargin: '200px' },
     );
-
     observer.observe(node);
-    return () => observer.disconnect();
+
+    near();
+    window.addEventListener('scroll', near, { passive: true });
+    window.addEventListener('resize', near, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', near);
+      window.removeEventListener('resize', near);
+    };
   }, [mode, armed]);
 
   /* La source n'est posée qu'ici, une fois armé. */
@@ -94,6 +116,12 @@ export default function VideoPlayer({
     <figure className={className}>
       <div
         ref={holder}
+        /* Ces deux attributs rendent l'état lisible de l'extérieur : ils
+           servent aux contrôles automatisés, qui vérifient qu'aucune vidéo
+           n'est armée au chargement et que les plans d'ambiance démarrent
+           bien une fois à l'écran. */
+        data-video-mode={mode}
+        data-video-armed={armed ? 'oui' : 'non'}
         className="relative overflow-hidden rounded-[var(--radius-xl2)] bg-ink"
         style={{ aspectRatio: ratio }}
       >
